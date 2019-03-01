@@ -5,4 +5,4 @@
  * @author phong
  *
  */
-package Resources;
+package resources;

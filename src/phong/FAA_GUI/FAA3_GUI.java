@@ -98,6 +98,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JPopupMenu;
 import javax.swing.JCheckBox;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 
 public class FAA3_GUI extends JFrame {
 
@@ -164,6 +166,7 @@ public class FAA3_GUI extends JFrame {
 	private JMenuItem mntmPrintTheList;
 	private JMenuItem mntmAutomaticallyDetectAppropriate;
 	private JButton btnAutoDetectNumber;
+	
 	private JTextField textFieldCompositionTable;
 	private JScrollPane scrollPane_4;
 	
@@ -194,6 +197,8 @@ public class FAA3_GUI extends JFrame {
 	private JMenuItem mntmSaveAllText;
 	public static JCheckBox chckbxEnglishOnly;
 	private JTextField txtContentstopwordstxt;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JTextField txtVfr;
 
 	public void InitWordnet(String wnhome) throws IOException {
 
@@ -218,7 +223,7 @@ public class FAA3_GUI extends JFrame {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void initComponents() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(FAA3_GUI.class.getResource("/Resources/icon2.png")));
-		setTitle("P Topic Modeling");
+		setTitle("FAA");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 700);
 
@@ -388,7 +393,7 @@ public class FAA3_GUI extends JFrame {
 		);
 
 		JLayeredPane layeredPane = new JLayeredPane();
-		tabbedPane.addTab("Extract documents using Tika", null, layeredPane, null);
+		tabbedPane.addTab("Text parsing", null, layeredPane, null);
 
 		JLabel lblFilesAndDocuments = new JLabel("Files and documents");
 		lblFilesAndDocuments.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -450,14 +455,14 @@ public class FAA3_GUI extends JFrame {
 		chckbxEnglishOnly.setEnabled(false);
 		
 		JCheckBox chckbxRemoveSpecialCharacters = new JCheckBox("Remove special characters and double space");
-		chckbxRemoveSpecialCharacters.setSelected(true);
 		
 		JCheckBox chckbxRemoveStopwords = new JCheckBox("Remove Stopwords");
-		chckbxRemoveStopwords.setSelected(true);
 		
 		txtContentstopwordstxt = new JTextField();
 		txtContentstopwordstxt.setText("ContentStopwords.txt");
 		txtContentstopwordstxt.setColumns(10);
+		
+		JCheckBox chckbxRemoveWordWith = new JCheckBox("Remove word with number");
 		GroupLayout gl_layeredPane = new GroupLayout(layeredPane);
 		gl_layeredPane.setHorizontalGroup(
 			gl_layeredPane.createParallelGroup(Alignment.TRAILING)
@@ -485,10 +490,10 @@ public class FAA3_GUI extends JFrame {
 									.addComponent(chckbxRemoveStopwords, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
 									.addGap(18)
 									.addComponent(txtContentstopwordstxt, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE))
-								.addComponent(chckbxRemoveSpecialCharacters, GroupLayout.PREFERRED_SIZE, 296, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED))
+								.addComponent(chckbxRemoveSpecialCharacters, GroupLayout.PREFERRED_SIZE, 296, GroupLayout.PREFERRED_SIZE)
+								.addComponent(chckbxRemoveWordWith, GroupLayout.PREFERRED_SIZE, 213, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_layeredPane.createSequentialGroup()
-							.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 1053, Short.MAX_VALUE)
+							.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 1063, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnXCancel, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_layeredPane.createSequentialGroup()
@@ -534,7 +539,9 @@ public class FAA3_GUI extends JFrame {
 								.addGap(15)
 								.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE)
 									.addComponent(chckbxRemoveStopwords)
-									.addComponent(txtContentstopwordstxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
+									.addComponent(txtContentstopwordstxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGap(13)
+								.addComponent(chckbxRemoveWordWith))))
 					.addGap(10)
 					.addGroup(gl_layeredPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnNew)
@@ -557,14 +564,14 @@ public class FAA3_GUI extends JFrame {
 
 		layeredPane_1 = new JLayeredPane();
 
-		tabbedPane.addTab("Estimate topics using Mallet", null, layeredPane_1, null);
+		tabbedPane.addTab("Topics estimation", null, layeredPane_1, null);
 
 		JLabel lblNewLabel = new JLabel("Text data folder:");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		txtTextdatafolder = new JTextField();
 		
-		txtTextdatafolder.setText("C:\\FAA2\\data_text_full");
+		txtTextdatafolder.setText("C:\\FAA3\\data_text_full");
 		txtTextdatafolder.setColumns(10);
 
 		JLabel lblNumberOfTopics = new JLabel("Number of topics:");
@@ -574,7 +581,7 @@ public class FAA3_GUI extends JFrame {
 		spinnerNumTopics.setModel(new SpinnerNumberModel(5, 1, 5000, 1));
 
 		JLabel lblParalleltopicmodel = new JLabel("Parallel Topic Model");
-		lblParalleltopicmodel.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblParalleltopicmodel.setHorizontalAlignment(SwingConstants.CENTER);
 
 		JSeparator separator_3 = new JSeparator();
 
@@ -642,25 +649,11 @@ public class FAA3_GUI extends JFrame {
 
 		spinnerNumWordsInTopic.setModel(new SpinnerNumberModel(10, 1, 20, 1));
 
-		JSeparator separator_7 = new JSeparator();
-
-		JSeparator separator_8 = new JSeparator();
-		separator_8.setOrientation(SwingConstants.VERTICAL);
-
-		JSeparator separator_9 = new JSeparator();
-
-		JSeparator separator_10 = new JSeparator();
-		separator_10.setOrientation(SwingConstants.VERTICAL);
-
-		JLabel lblBuildPipe = new JLabel("Build the Serial Pipe");
-		lblBuildPipe.setHorizontalAlignment(SwingConstants.CENTER);
-
-		JScrollPane scrollPane_5 = new JScrollPane();
-
 		JList list_1 = new JList();
+		list_1.setVisibleRowCount(1);
 		list_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		list_1.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Input2CharSequence(\"UTF-8\")", "CharSequence2TokenSequence(\"\\\\w+\")", "TokenSequenceLowercase()", "TokenSequenceRemoveStopwords( \"enlish_stopwords.txt\")", "TokenSequence2FeatureSequence()", "Target2Label()"};
+			String[] values = new String[] {};
 			public int getSize() {
 				return values.length;
 			}
@@ -668,7 +661,6 @@ public class FAA3_GUI extends JFrame {
 				return values[index];
 			}
 		});
-		scrollPane_5.setViewportView(list_1);
 
 		scrollPane_4 = new JScrollPane();
 
@@ -698,15 +690,6 @@ public class FAA3_GUI extends JFrame {
 		scrollPane_3.setViewportView(listTopics);
 
 		btnGetCompositionTable = new JButton("Get composition table from new folder");
-		btnGetCompositionTable.setFont(new Font("Tahoma", Font.PLAIN, 11));
-
-		btnGetCompositionTable.setEnabled(false);
-
-		JButton button = new JButton("");
-		button.setIcon(new ImageIcon(FAA3_GUI.class.getResource("/Resources/Up4.png")));
-
-		JButton button_1 = new JButton("");
-		button_1.setIcon(new ImageIcon(FAA3_GUI.class.getResource("/Resources/down4.png")));
 		
 		btnAutoDetectNumber = new JButton("Auto detect");
 		btnAutoDetectNumber.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -731,6 +714,26 @@ public class FAA3_GUI extends JFrame {
 		
 		JButton button_2 = new JButton("...");
 		button_2.setToolTipText("Full range of possible parameters of train-topics ");
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setLayout(null);
+		panel_2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		
+		JLabel lblSerialPipe = new JLabel("Serial Pipe");
+		lblSerialPipe.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSerialPipe.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblSerialPipe.setBounds(10, 0, 350, 24);
+		panel_2.add(lblSerialPipe);
+		
+		JSeparator separator_30 = new JSeparator();
+		separator_30.setBounds(10, 22, 350, 2);
+		panel_2.add(separator_30);
 		GroupLayout gl_layeredPane_1 = new GroupLayout(layeredPane_1);
 		gl_layeredPane_1.setHorizontalGroup(
 			gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
@@ -802,33 +805,18 @@ public class FAA3_GUI extends JFrame {
 									.addGap(117)
 									.addComponent(lblNumberOfTop, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)))
 							.addComponent(spinnerNumWordsInTopic, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)))
-					.addGap(9)
 					.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_layeredPane_1.createSequentialGroup()
-							.addGap(1)
-							.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_layeredPane_1.createSequentialGroup()
-									.addGap(5)
-									.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 297, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_layeredPane_1.createSequentialGroup()
-									.addGap(346)
-									.addComponent(separator_10, GroupLayout.PREFERRED_SIZE, 13, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_layeredPane_1.createSequentialGroup()
-									.addGap(124)
-									.addComponent(separator_9, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE))
-								.addComponent(lblBuildPipe, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_layeredPane_1.createSequentialGroup()
-									.addGap(310)
-									.addComponent(button, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-								.addComponent(separator_8, GroupLayout.PREFERRED_SIZE, 13, GroupLayout.PREFERRED_SIZE)
-								.addComponent(separator_7, GroupLayout.PREFERRED_SIZE, 347, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_layeredPane_1.createSequentialGroup()
-									.addGap(310)
-									.addComponent(button_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))))
+							.addGap(6)
+							.addComponent(btnGetCompositionTable, GroupLayout.PREFERRED_SIZE, 230, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_layeredPane_1.createSequentialGroup()
-							.addComponent(btnGetCompositionTable, GroupLayout.PREFERRED_SIZE, 230, GroupLayout.PREFERRED_SIZE)
-							.addGap(10)
-							.addComponent(textFieldCompositionTable, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))))
+							.addGap(18)
+							.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 370, GroupLayout.PREFERRED_SIZE)))
+					.addGap(22)
+					.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.TRAILING)
+						.addComponent(panel_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+						.addComponent(panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE))
+					.addGap(42))
 				.addGroup(gl_layeredPane_1.createSequentialGroup()
 					.addGap(10)
 					.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 336, GroupLayout.PREFERRED_SIZE)
@@ -925,36 +913,16 @@ public class FAA3_GUI extends JFrame {
 									.addGap(1)
 									.addComponent(spinnerNumWordsInTopic, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
 						.addGroup(gl_layeredPane_1.createSequentialGroup()
-							.addGap(3)
+							.addGap(7)
 							.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_layeredPane_1.createSequentialGroup()
-									.addGap(27)
-									.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_layeredPane_1.createSequentialGroup()
-									.addGap(4)
-									.addComponent(separator_10, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_layeredPane_1.createSequentialGroup()
-									.addGap(4)
-									.addComponent(separator_9, GroupLayout.PREFERRED_SIZE, 11, GroupLayout.PREFERRED_SIZE))
-								.addComponent(lblBuildPipe)
-								.addGroup(gl_layeredPane_1.createSequentialGroup()
-									.addGap(28)
-									.addComponent(button, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_layeredPane_1.createSequentialGroup()
-									.addGap(8)
-									.addComponent(separator_8, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_layeredPane_1.createSequentialGroup()
-									.addGap(154)
-									.addComponent(separator_7, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_layeredPane_1.createSequentialGroup()
-									.addGap(83)
-									.addComponent(button_1, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)))
-							.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnGetCompositionTable)
-								.addGroup(gl_layeredPane_1.createSequentialGroup()
-									.addGap(1)
-									.addComponent(textFieldCompositionTable, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
-					.addGap(19)
+									.addComponent(panel, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+								.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 170, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnGetCompositionTable)))
+					.addGap(43)
 					.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
 						.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
 						.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE))
@@ -963,6 +931,85 @@ public class FAA3_GUI extends JFrame {
 						.addComponent(progressBarMallet, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnCancelMallet, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
 		);
+		
+		JScrollPane scrollPane_8 = new JScrollPane();
+		scrollPane_8.setBounds(10, 35, 314, 124);
+		panel_2.add(scrollPane_8);
+		
+		JList list_2 = new JList();
+		list_2.setModel(new AbstractListModel() {
+			String[] values = new String[] {"Input2CharSequence(\"UTF-8\")", "CharSequence2TokenSequence(\"\\\\w+\")", "TokenSequenceLowercase()", "TokenSequenceRemoveStopwords( \"enlish_stopwords.txt\")", "TokenSequence2FeatureSequence()", "Target2Label()"};
+			public int getSize() {
+				return values.length;
+			}
+			public Object getElementAt(int index) {
+				return values[index];
+			}
+		});
+		scrollPane_8.setViewportView(list_2);
+		list_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		
+				JButton button = new JButton("");
+				button.setBounds(334, 35, 26, 50);
+				panel_2.add(button);
+				button.setIcon(new ImageIcon(FAA3_GUI.class.getResource("/Resources/Up4.png")));
+				
+						JButton button_1 = new JButton("");
+						button_1.setBounds(334, 109, 26, 50);
+						panel_2.add(button_1);
+						button_1.setIcon(new ImageIcon(FAA3_GUI.class.getResource("/Resources/down4.png")));
+		panel_1.setLayout(null);
+		
+		JLabel lblTopicSearch = new JLabel("Topic Search:");
+		lblTopicSearch.setBounds(6, 8, 121, 16);
+		lblTopicSearch.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblTopicSearch.setHorizontalAlignment(SwingConstants.LEFT);
+		panel_1.add(lblTopicSearch);
+		
+		JButton btnSearchTopics = new JButton("Search topics");
+		btnSearchTopics.setBounds(164, 5, 184, 23);
+		btnSearchTopics.setFont(new Font("Tahoma", Font.BOLD, 12));
+		panel_1.add(btnSearchTopics);
+		
+		txtVfr = new JTextField();
+		txtVfr.setHorizontalAlignment(SwingConstants.CENTER);
+		txtVfr.setBounds(6, 33, 342, 22);
+		txtVfr.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		txtVfr.setText("VFR");
+		txtVfr.setColumns(32);
+		panel_1.add(txtVfr);
+		panel.setLayout(null);
+		
+		JLabel label = new JLabel("N-gram");
+		label.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		label.setBounds(10, 0, 338, 24);
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(label);
+		
+		JRadioButton rdbtnUnigram = new JRadioButton("unigram");
+		rdbtnUnigram.setBounds(26, 31, 63, 23);
+		rdbtnUnigram.setSelected(true);
+		buttonGroup.add(rdbtnUnigram);
+		panel.add(rdbtnUnigram);
+		
+		JRadioButton rdbtnBigram = new JRadioButton("bigram");
+		rdbtnBigram.setBounds(107, 31, 57, 23);
+		buttonGroup.add(rdbtnBigram);
+		panel.add(rdbtnBigram);
+		
+		JRadioButton rdbtnTrigram = new JRadioButton("trigram");
+		rdbtnTrigram.setBounds(181, 31, 59, 23);
+		buttonGroup.add(rdbtnTrigram);
+		panel.add(rdbtnTrigram);
+		
+		JRadioButton rdbtngram = new JRadioButton("4-gram");
+		rdbtngram.setBounds(259, 31, 59, 23);
+		buttonGroup.add(rdbtngram);
+		panel.add(rdbtngram);
+		
+		JSeparator separator_7 = new JSeparator();
+		separator_7.setBounds(10, 22, 338, 2);
+		panel.add(separator_7);
 		
 		JPopupMenu popupMenu_1 = new JPopupMenu();
 		scrollPane_4.setColumnHeaderView(popupMenu_1);
@@ -976,7 +1023,7 @@ public class FAA3_GUI extends JFrame {
 				spinnerNumWordsInTopic, btnEstimateTopics, btnCancelMallet, btnGetCompositionTable, list_1 }));
 
 		JLayeredPane layeredPane_2 = new JLayeredPane();
-		tabbedPane.addTab("Formulate topics using lexical database Wordnet", null, layeredPane_2, null);
+		tabbedPane.addTab("Computational linguistics and natural language processing", null, layeredPane_2, null);
 
 		JLabel lblGenerateTopicsUsing = new JLabel("Pre-process input text data using words stemming");
 		lblGenerateTopicsUsing.setFont(new Font("Tahoma", Font.BOLD, 11));
