@@ -628,7 +628,7 @@ public class FAA3_GUI extends JFrame {
 		spinnerNumOfIterations = new JSpinner();
 		
 		spinnerNumOfIterations.setToolTipText("for testing only: you could use about 50 iterations , for real applications: use 1000 to 2000 iterations");
-		spinnerNumOfIterations.setModel(new SpinnerNumberModel(2500, 1, 10000, 1));
+		spinnerNumOfIterations.setModel(new SpinnerNumberModel(1500, 1, 10000, 1));
 
 		btnEstimateTopics = new JButton("Estimate topics");
 
@@ -690,6 +690,7 @@ public class FAA3_GUI extends JFrame {
 		scrollPane_3.setViewportView(listTopics);
 
 		btnGetCompositionTable = new JButton("Get composition table from new folder");
+		btnGetCompositionTable.setEnabled(false);
 		
 		btnAutoDetectNumber = new JButton("Auto detect");
 		btnAutoDetectNumber.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -805,27 +806,26 @@ public class FAA3_GUI extends JFrame {
 									.addGap(117)
 									.addComponent(lblNumberOfTop, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)))
 							.addComponent(spinnerNumWordsInTopic, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)))
-					.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_layeredPane_1.createSequentialGroup()
-							.addGap(6)
-							.addComponent(btnGetCompositionTable, GroupLayout.PREFERRED_SIZE, 230, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_layeredPane_1.createSequentialGroup()
-							.addGap(18)
-							.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 370, GroupLayout.PREFERRED_SIZE)))
+					.addGap(18)
+					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 370, GroupLayout.PREFERRED_SIZE)
 					.addGap(22)
-					.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.TRAILING)
-						.addComponent(panel_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
-						.addComponent(panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE))
+					.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(panel_1, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 358, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 358, GroupLayout.PREFERRED_SIZE))
 					.addGap(42))
 				.addGroup(gl_layeredPane_1.createSequentialGroup()
-					.addGap(10)
+					.addContainerGap()
 					.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 336, GroupLayout.PREFERRED_SIZE)
 					.addGap(21)
 					.addComponent(scrollPane_4, GroupLayout.DEFAULT_SIZE, 791, Short.MAX_VALUE)
-					.addGap(10))
+					.addContainerGap())
 				.addGroup(gl_layeredPane_1.createSequentialGroup()
 					.addComponent(progressBarMallet, GroupLayout.DEFAULT_SIZE, 1069, Short.MAX_VALUE)
 					.addComponent(btnCancelMallet, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_layeredPane_1.createSequentialGroup()
+					.addGap(570)
+					.addComponent(btnGetCompositionTable, GroupLayout.PREFERRED_SIZE, 230, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(368, Short.MAX_VALUE))
 		);
 		gl_layeredPane_1.setVerticalGroup(
 			gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
@@ -919,17 +919,17 @@ public class FAA3_GUI extends JFrame {
 									.addComponent(panel, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
-								.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 170, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnGetCompositionTable)))
-					.addGap(43)
+								.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 170, GroupLayout.PREFERRED_SIZE))))
+					.addGap(18)
 					.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
-						.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE))
+						.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+						.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE))
 					.addGap(11)
 					.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
 						.addComponent(progressBarMallet, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnCancelMallet, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(btnCancelMallet, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+					.addComponent(btnGetCompositionTable))
 		);
 		
 		JScrollPane scrollPane_8 = new JScrollPane();
@@ -987,23 +987,23 @@ public class FAA3_GUI extends JFrame {
 		panel.add(label);
 		
 		JRadioButton rdbtnUnigram = new JRadioButton("unigram");
-		rdbtnUnigram.setBounds(26, 31, 63, 23);
+		rdbtnUnigram.setBounds(6, 31, 83, 23);
 		rdbtnUnigram.setSelected(true);
 		buttonGroup.add(rdbtnUnigram);
 		panel.add(rdbtnUnigram);
 		
 		JRadioButton rdbtnBigram = new JRadioButton("bigram");
-		rdbtnBigram.setBounds(107, 31, 57, 23);
+		rdbtnBigram.setBounds(91, 31, 73, 23);
 		buttonGroup.add(rdbtnBigram);
 		panel.add(rdbtnBigram);
 		
 		JRadioButton rdbtnTrigram = new JRadioButton("trigram");
-		rdbtnTrigram.setBounds(181, 31, 59, 23);
+		rdbtnTrigram.setBounds(181, 31, 82, 23);
 		buttonGroup.add(rdbtnTrigram);
 		panel.add(rdbtnTrigram);
 		
 		JRadioButton rdbtngram = new JRadioButton("4-gram");
-		rdbtngram.setBounds(259, 31, 59, 23);
+		rdbtngram.setBounds(265, 31, 83, 23);
 		buttonGroup.add(rdbtngram);
 		panel.add(rdbtngram);
 		
