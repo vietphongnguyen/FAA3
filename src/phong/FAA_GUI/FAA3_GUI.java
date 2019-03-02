@@ -190,6 +190,7 @@ public class FAA3_GUI extends JFrame {
 
 	static int SizeOfInstance;
 	autoDetectNumTopics autoTopic;
+	SuggestedDocumentsForATopic suggestedDocumentsForATopic;
 	private JTextField textField;
 	private JButton btnGetStemWords;
 	private JSpinner spinnerNumWordTipicWordnet;
@@ -2180,8 +2181,8 @@ public class FAA3_GUI extends JFrame {
 	protected void getTopicDocsScore(String fileName, InstanceList instances) {
 		// TODO Auto-generated method stub
 		// fileName, instances
-		
-		
+		suggestedDocumentsForATopic = new SuggestedDocumentsForATopic();
+		suggestedDocumentsForATopic.setVisible(true);
 		
 	}
 
