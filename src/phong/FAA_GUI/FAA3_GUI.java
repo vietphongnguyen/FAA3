@@ -47,6 +47,7 @@ import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
@@ -65,6 +66,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 import java.awt.event.ActionEvent;
 import javax.swing.JProgressBar;
 import javax.swing.ImageIcon;
@@ -210,6 +212,7 @@ public class FAA3_GUI extends JFrame {
 	public static JCheckBoxMenuItem chckbxmntmAutoClearAfter;
 	public static JButton btnSearchTopics;
 	private JButton btnEstimateTopicsSimilar;
+	private JButton btnGetScore;
 
 	public void InitWordnet(String wnhome) throws IOException {
 
@@ -1003,8 +1006,14 @@ public class FAA3_GUI extends JFrame {
 		btnEstimateTopicsSimilar = new JButton("Estimate topics similar with this text");
 		
 		btnEstimateTopicsSimilar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnEstimateTopicsSimilar.setBounds(103, 66, 245, 23);
+		btnEstimateTopicsSimilar.setBounds(6, 66, 250, 23);
 		panel_1.add(btnEstimateTopicsSimilar);
+		
+		btnGetScore = new JButton("Get Score");
+		btnGetScore.setEnabled(false);
+		
+		btnGetScore.setBounds(255, 66, 93, 23);
+		panel_1.add(btnGetScore);
 		panel.setLayout(null);
 		
 		JLabel label = new JLabel("N-gram");
@@ -1498,15 +1507,38 @@ public class FAA3_GUI extends JFrame {
 	
 	private void createEvents() {
 
+		btnGetScore.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				removeTopicSearchFile(txtTextdatafolder.getText(),"P_N_Topic_Search.txt");
+				getTopicDocsScore("P_N_Topic_Search.txt", generateTopics.instances);
+			}
+		});
+		
 		btnEstimateTopicsSimilar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//createTextFileFromTopic(topicSearch, folder, maxNumberOfWords, fileName);
-				createTextFileFromTopic(txSearchTopic.getText(), txtTextdatafolder.getText(), 4000, "P_N_Topic_Search.txt");
+				try {
+					createTextFileFromTopic(txSearchTopic.getText(), txtTextdatafolder.getText(), 4000, "P_N_Topic_Search.txt");
+				} catch (Exception e) {
+					e.printStackTrace();
+					Outln("Error: " + e.getMessage());
+					return;
+				}
+				
 				
 				actionPerformed_EstimateTopics();
-				
+				btnGetScore.setEnabled(true);
+				/*{
+					//Wait 5 second
+					try {
+						TimeUnit.SECONDS.sleep(5);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+				} while (!process_GenerateTopics.isDone());
 				removeTopicSearchFile(txtTextdatafolder.getText(),"P_N_Topic_Search.txt");
-				getTopicDocsScore("P_N_Topic_Search.txt", generateTopics.instances);
+				getTopicDocsScore("P_N_Topic_Search.txt", generateTopics.instances);*/
 				
 			}
 		});
@@ -2154,16 +2186,52 @@ public class FAA3_GUI extends JFrame {
 	}
 
 	protected void removeTopicSearchFile(String folder, String fileName) {
-		// TODO Auto-generated method stub
 		// folder, fileName
-		
-		
+		try {
+			File file = new File(folder + "\\" + fileName);
+			if (file.delete()) {
+				//System.out.println(file.getName() + " is deleted!");
+			} else {
+				//System.out.println("Delete operation is failed.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			Outln("Warning: " + e.getMessage());
+		}
 	}
 
-	protected void createTextFileFromTopic(String topicSearch, String folder, int maxNumberOfWords, String fileName) {
-		// TODO Auto-generated method stub
+	protected void createTextFileFromTopic(String topicSearch, String folder, int maxNumberOfWords, String fileName) throws Exception {
 		//createTextFileFromTopic(topicSearch, folder, maxNumberOfWords, fileName);
+		String s=""; 
+		Character ch;
+		for (int i = 0; i< topicSearch.length(); i++) {
+			ch = topicSearch.charAt(i);
+			if (Character.isLetterOrDigit(ch)) 
+				s += ch;
+			else s += " ";
+		}
+		String[] words = s.toLowerCase().split(" ");
 		
+		s = "";
+		Set<String> wSet = new HashSet<String> ();
+		for (String word : words) {
+			if (!wSet.contains(word)) {
+				wSet.add(word);
+				s += word + " ";
+			}
+		}
+		
+		int k = wSet.size();
+		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(folder+"\\"+fileName, true));
+
+		// bufferedWriter.write("Hello World");
+		// bufferedWriter.newLine();
+		for (int i = 0; i < maxNumberOfWords / k; i++) {
+			bufferedWriter.write(s);
+			bufferedWriter.newLine();
+		}
+
+		bufferedWriter.close();
 		
 	}
 
@@ -2382,7 +2450,7 @@ public class FAA3_GUI extends JFrame {
 			spinnerNumThreards.commitEdit();
 			spinnerNumWordsInTopic.commitEdit();
 		} catch (ParseException e2) {
-			Outln(e2.toString());
+			Outln("Warning: " + e2.getMessage());
 		}
 		process_GenerateTopics = new generateTopics(
 				txtTextdatafolder.getText(), (int) spinnerNumTopics.getValue(),
@@ -2394,7 +2462,7 @@ public class FAA3_GUI extends JFrame {
 			btnGetCompositionTable.setEnabled(false);
 			process_GenerateTopics.execute();
 		} catch (Exception e1) {
-			Outln(e1.toString());
+			Outln("Error: " +e1.getMessage());
 		}
 
 	}
