@@ -11,6 +11,7 @@ import org.xml.sax.SAXException;
 import cc.mallet.topics.ParallelTopicModel;
 import cc.mallet.types.Alphabet;
 import cc.mallet.types.IDSorter;
+import cc.mallet.types.InstanceList;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
 import edu.mit.jwi.item.IIndexWord;
@@ -208,6 +209,7 @@ public class FAA3_GUI extends JFrame {
 	private JTextField txSearchTopic;
 	public static JCheckBoxMenuItem chckbxmntmAutoClearAfter;
 	public static JButton btnSearchTopics;
+	private JButton btnEstimateTopicsSimilar;
 
 	public void InitWordnet(String wnhome) throws IOException {
 
@@ -998,7 +1000,8 @@ public class FAA3_GUI extends JFrame {
 		txSearchTopic.setColumns(32);
 		panel_1.add(txSearchTopic);
 		
-		JButton btnEstimateTopicsSimilar = new JButton("Estimate topics similar with this text");
+		btnEstimateTopicsSimilar = new JButton("Estimate topics similar with this text");
+		
 		btnEstimateTopicsSimilar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnEstimateTopicsSimilar.setBounds(103, 66, 245, 23);
 		panel_1.add(btnEstimateTopicsSimilar);
@@ -1495,6 +1498,19 @@ public class FAA3_GUI extends JFrame {
 	
 	private void createEvents() {
 
+		btnEstimateTopicsSimilar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//createTextFileFromTopic(topicSearch, folder, maxNumberOfWords, fileName);
+				createTextFileFromTopic(txSearchTopic.getText(), txtTextdatafolder.getText(), 4000, "P_N_Topic_Search.txt");
+				
+				actionPerformed_EstimateTopics();
+				
+				removeTopicSearchFile(txtTextdatafolder.getText(),"P_N_Topic_Search.txt");
+				getTopicDocsScore("P_N_Topic_Search.txt", generateTopics.instances);
+				
+			}
+		});
+		
 		btnSearchTopics.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -1611,7 +1627,6 @@ public class FAA3_GUI extends JFrame {
 							}
 							
 						} catch (Exception e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						if (! stemWord.isEmpty()) { 
@@ -1745,7 +1760,6 @@ public class FAA3_GUI extends JFrame {
 													break outter;
 												}
 											} catch (Exception e1) {
-												// TODO Auto-generated catch block
 												e1.printStackTrace();
 											}
 										}
@@ -2131,6 +2145,28 @@ public class FAA3_GUI extends JFrame {
 		});
 
 	}
+	protected void getTopicDocsScore(String fileName, InstanceList instances) {
+		// TODO Auto-generated method stub
+		// fileName, instances
+		
+		
+		
+	}
+
+	protected void removeTopicSearchFile(String folder, String fileName) {
+		// TODO Auto-generated method stub
+		// folder, fileName
+		
+		
+	}
+
+	protected void createTextFileFromTopic(String topicSearch, String folder, int maxNumberOfWords, String fileName) {
+		// TODO Auto-generated method stub
+		//createTextFileFromTopic(topicSearch, folder, maxNumberOfWords, fileName);
+		
+		
+	}
+
 	protected void searchTopics(String s, ParallelTopicModel model) {
 		s = s.toLowerCase();
 		//System.out.println("s = " + s);
@@ -2246,7 +2282,7 @@ public class FAA3_GUI extends JFrame {
 
 		@SuppressWarnings("rawtypes")
 		public ListPrinter(JList listTopics) {
-			// TODO Auto-generated constructor stub
+			
 		}
 
 		public int print(Graphics g, PageFormat pf, int page) throws PrinterException {

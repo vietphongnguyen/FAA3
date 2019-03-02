@@ -220,32 +220,6 @@ public class generateTopics extends SwingWorker {
 
 		printCompositionTableFromInstances();
 
-		/*
-		 * long currentTime,traveredTime;
-		 * TopicModeling.progressBarMallet.setValue(generateTopics.count); double
-		 * percent = 100* generateTopics.count/ generateTopics.MaxProgress;
-		 * 
-		 * currentTime = System.nanoTime(); // get current time traveredTime =
-		 * (currentTime - generateTopics.startTime) ;
-		 * 
-		 * long remainingTime = (long) (traveredTime * ((100-percent) /percent ));
-		 * remainingTime = remainingTime / 1000000000; // converted from nanoseconds to
-		 * second generateTopics.count++;
-		 * TopicModeling.progressBarMallet.setString("Doing " + (generateTopics.count) +
-		 * " / " + generateTopics.MaxProgress + " ( " + percent +
-		 * " % )  Time remaining: " + remainingTime/60 +" m " + remainingTime % 60 +
-		 * " s" );
-		 */
-
-		/*
-		 * // Cancel the process by user if
-		 * (TopicModeling.process_GenerateTopics.isCancelled()) { TopicModeling.
-		 * Out("The process of generating topics had been canceled by user  \n");
-		 * TopicModeling.btnEstimateTopics.setEnabled(true);
-		 * TopicModeling.process_GenerateTopics_running = false; return -1; }
-		 * 
-		 */
-
 		// Completed
 		FAA3_GUI.progressBarMallet
 				.setString("Done " + (count) + " / " + numIterations + " ( Estimating topics finished )");
