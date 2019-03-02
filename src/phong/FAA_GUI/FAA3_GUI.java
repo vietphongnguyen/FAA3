@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 import org.apache.tika.exception.TikaException;
 import org.xml.sax.SAXException;
 
+import cc.mallet.topics.ParallelTopicModel;
+import cc.mallet.types.Alphabet;
 import cc.mallet.types.IDSorter;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
@@ -54,9 +56,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Formatter;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 import java.awt.event.ActionEvent;
 import javax.swing.JProgressBar;
@@ -100,6 +106,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 
 public class FAA3_GUI extends JFrame {
 
@@ -198,7 +205,9 @@ public class FAA3_GUI extends JFrame {
 	public static JCheckBox chckbxEnglishOnly;
 	private JTextField txtContentstopwordstxt;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private JTextField txtVfr;
+	private JTextField txSearchTopic;
+	public static JCheckBoxMenuItem chckbxmntmAutoClearAfter;
+	public static JButton btnSearchTopics;
 
 	public void InitWordnet(String wnhome) throws IOException {
 
@@ -277,6 +286,14 @@ public class FAA3_GUI extends JFrame {
 		mntmClearConsole = new JMenuItem("Clear console");
 
 		mnConsole.add(mntmClearConsole);
+		
+		chckbxmntmAutoClearAfter = new JCheckBoxMenuItem("Auto clear before each estimation");
+		chckbxmntmAutoClearAfter.setSelected(true);
+		mnConsole.add(chckbxmntmAutoClearAfter);
+		
+		JCheckBoxMenuItem chckbxmntmAutoSaveConsole = new JCheckBoxMenuItem("Auto save console before each estimation");
+		chckbxmntmAutoSaveConsole.setSelected(true);
+		mnConsole.add(chckbxmntmAutoSaveConsole);
 		
 		JSeparator separator_29 = new JSeparator();
 		mnConsole.add(separator_29);
@@ -647,7 +664,7 @@ public class FAA3_GUI extends JFrame {
 
 		spinnerNumWordsInTopic = new JSpinner();
 
-		spinnerNumWordsInTopic.setModel(new SpinnerNumberModel(10, 1, 20, 1));
+		spinnerNumWordsInTopic.setModel(new SpinnerNumberModel(new Integer(10), new Integer(1), null, new Integer(1)));
 
 		JList list_1 = new JList();
 		list_1.setVisibleRowCount(1);
@@ -809,9 +826,9 @@ public class FAA3_GUI extends JFrame {
 					.addGap(18)
 					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 370, GroupLayout.PREFERRED_SIZE)
 					.addGap(22)
-					.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(panel_1, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 358, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 358, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 358, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 358, GroupLayout.PREFERRED_SIZE))
 					.addGap(42))
 				.addGroup(gl_layeredPane_1.createSequentialGroup()
 					.addContainerGap()
@@ -914,11 +931,11 @@ public class FAA3_GUI extends JFrame {
 									.addComponent(spinnerNumWordsInTopic, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
 						.addGroup(gl_layeredPane_1.createSequentialGroup()
 							.addGap(7)
-							.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING, false)
 								.addGroup(gl_layeredPane_1.createSequentialGroup()
 									.addComponent(panel, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+									.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 								.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 170, GroupLayout.PREFERRED_SIZE))))
 					.addGap(18)
 					.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
@@ -928,7 +945,7 @@ public class FAA3_GUI extends JFrame {
 					.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
 						.addComponent(progressBarMallet, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnCancelMallet, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addComponent(btnGetCompositionTable))
 		);
 		
@@ -962,22 +979,29 @@ public class FAA3_GUI extends JFrame {
 		
 		JLabel lblTopicSearch = new JLabel("Topic Search:");
 		lblTopicSearch.setBounds(6, 8, 121, 16);
-		lblTopicSearch.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblTopicSearch.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblTopicSearch.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_1.add(lblTopicSearch);
 		
-		JButton btnSearchTopics = new JButton("Search topics");
-		btnSearchTopics.setBounds(164, 5, 184, 23);
-		btnSearchTopics.setFont(new Font("Tahoma", Font.BOLD, 12));
+		btnSearchTopics = new JButton("Search topics in the Top Words List");
+		btnSearchTopics.setEnabled(false);
+		
+		btnSearchTopics.setBounds(103, 5, 245, 23);
+		btnSearchTopics.setFont(new Font("Tahoma", Font.BOLD, 11));
 		panel_1.add(btnSearchTopics);
 		
-		txtVfr = new JTextField();
-		txtVfr.setHorizontalAlignment(SwingConstants.CENTER);
-		txtVfr.setBounds(6, 33, 342, 22);
-		txtVfr.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		txtVfr.setText("VFR");
-		txtVfr.setColumns(32);
-		panel_1.add(txtVfr);
+		txSearchTopic = new JTextField();
+		txSearchTopic.setHorizontalAlignment(SwingConstants.CENTER);
+		txSearchTopic.setBounds(6, 33, 342, 22);
+		txSearchTopic.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		txSearchTopic.setText("VFR");
+		txSearchTopic.setColumns(32);
+		panel_1.add(txSearchTopic);
+		
+		JButton btnEstimateTopicsSimilar = new JButton("Estimate topics similar with this text");
+		btnEstimateTopicsSimilar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnEstimateTopicsSimilar.setBounds(103, 66, 245, 23);
+		panel_1.add(btnEstimateTopicsSimilar);
 		panel.setLayout(null);
 		
 		JLabel label = new JLabel("N-gram");
@@ -1471,6 +1495,13 @@ public class FAA3_GUI extends JFrame {
 	
 	private void createEvents() {
 
+		btnSearchTopics.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				searchTopics(txSearchTopic.getText(), generateTopics.model);
+			}
+		});
+		
 		mntmRestartThisApplication.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -2100,6 +2131,56 @@ public class FAA3_GUI extends JFrame {
 		});
 
 	}
+	protected void searchTopics(String s, ParallelTopicModel model) {
+		s = s.toLowerCase();
+		//System.out.println("s = " + s);
+		String[] words;
+		Set<String> searchWords = new HashSet<String>();
+		
+		try {
+			words = s.split(" ");
+			if (words.length <=0) return;
+			for (String w :words ) {
+				searchWords.add(w);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		if (model == null) {
+			actionPerformed_EstimateTopics();
+			return;
+		}
+
+		Outln(" ------------------ \nSearch topic [ " + s.trim() + " ] in the TOP WORDS LIST:   " );
+		int n= generateTopics.numTopics;
+		
+		IDSorter idCountPair;
+		String topicWord;
+		Alphabet alphabet = generateTopics.dataAlphabet;
+		// Show top words in topics with proportions for the first document
+		for (int topic = 0; topic < n; topic++) {
+			Out("Topic " + topic + " : ");
+			Map<String, Integer> topicMap = new HashMap<String, Integer>();
+			Iterator<IDSorter> iterator = model.getSortedWords().get(topic).iterator();
+			while (iterator.hasNext()) {
+				idCountPair = iterator.next();
+				//out.format("%s (%.0f) ", dataAlphabet.lookupObject(idCountPair.getID()), idCountPair.getWeight());
+				topicWord = alphabet.lookupObject(idCountPair.getID()).toString();
+				if (searchWords.contains(topicWord)) {
+					topicMap.put(topicWord, (int) idCountPair.getWeight());
+				}
+			}
+			for (Map.Entry<String, Integer> t : topicMap.entrySet()) {
+				Out(t.getKey() + " (" + t.getValue() + "), ");
+			}
+			Outln("");
+		}
+		
+		
+	}
+
 	protected void PrintCompositionTable() {
 		tabbedPane.setSelectedIndex(1);
 		
@@ -2334,13 +2415,15 @@ public class FAA3_GUI extends JFrame {
 	}
 
 	public static void Outln(String string) {
+		//System.out.println(string);
 		if (NoConsoleOutput) return;
 		if (!console.isVisible()) return;
-		Out(string + "\n");
+		console.setText(console.getText() + string + "\n" );
 		console.setCaretPosition(console.getDocument().getLength());
 	}
 
 	public static void Out(String s) {
+		//System.out.print(s);
 		if (NoConsoleOutput) return;
 		if (!console.isVisible()) return;
 		console.setText(console.getText() + s);

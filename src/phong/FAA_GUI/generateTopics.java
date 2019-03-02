@@ -60,9 +60,9 @@ public class generateTopics extends SwingWorker {
 	static Formatter out;
 	static Formatter outTopicsTextBox;
 	static double[] topicDistribution;
-	static Alphabet dataAlphabet;
+	public static Alphabet dataAlphabet;
 	static InstanceList instances;
-	static ParallelTopicModel model;
+	public static ParallelTopicModel model;
 	public static List<RowSorter.SortKey> sortKeys;
 	public static TableRowSorter<TableModel> sorter;
 	static String resultForConsole = "";
@@ -70,7 +70,7 @@ public class generateTopics extends SwingWorker {
 	// Constructor
 	public generateTopics(String data_text, int numtopics, double alphaSum, double beta, int numThreads,
 			int numiterations, int numberOfWordsInATopic) {
-
+		
 
 		dataFolder = data_text;
 		numTopics = numtopics;
@@ -80,8 +80,14 @@ public class generateTopics extends SwingWorker {
 		numIterations = numiterations;
 		NumberOfWordsInATopic = numberOfWordsInATopic;
 		pipe = buildPipe();
+		
+		if (FAA3_GUI.chckbxmntmAutoClearAfter.isSelected() ) {
+			resultForConsole = "";
+			FAA3_GUI.console.setText("");
+		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Pipe buildPipe() {
 		ArrayList pipeList = new ArrayList();
 
@@ -101,8 +107,17 @@ public class generateTopics extends SwingWorker {
 		pipeList.add(new TokenSequenceLowercase());
 
 		// pipeList.add(new TokenSequenceRemoveStopwords(false, false));
-		pipeList.add(new TokenSequenceRemoveStopwords(new File("enlish_stopwords.txt"), "UTF-8", false, false, false) );
-		//pipeList.add(new TokenSequenceRemoveStopwords(new File(getClass().getResource("/Resources/en.txt").getFile()), "UTF-8", false, false, false));
+		try {
+			pipeList.add(new TokenSequenceRemoveStopwords(new File("enlish_stopwords.txt"), "UTF-8", false, false, false) );
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				pipeList.add(new TokenSequenceRemoveStopwords(new File(getClass().getResource("/Resources/en.txt").getFile()), "UTF-8", false, false, false));
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+		
 
 		pipeList.add(new TokenSequence2FeatureSequence());
 		pipeList.add(new Target2Label());
@@ -143,19 +158,14 @@ public class generateTopics extends SwingWorker {
 	protected Object doInBackground() throws Exception {
 		
 		FAA3_GUI.process_GenerateTopics_running = true;
-
 		FAA3_GUI.Outln("Generating topics ... ");
-
 		instances = this.readDirectory(new File(dataFolder));
 
-		instances.save(new File(dataFolder + ".mallet"));
+		//instances.save(new File(dataFolder + ".mallet"));
 
 		model = new ParallelTopicModel(numTopics, AlphaSum, Beta);
-
 		model.addInstances(instances);
-
 		model.setNumThreads(NumThreads);
-
 		model.setNumIterations(numIterations);
 
 		FAA3_GUI.progressBarMallet.setMaximum(numIterations);
@@ -166,7 +176,7 @@ public class generateTopics extends SwingWorker {
 		try {
 			model.estimate();
 		} catch (Exception e) {
-			FAA3_GUI.Outln(e.toString());
+			//FAA3_GUI.Outln(e.toString());
 			e.printStackTrace();
 			FAA3_GUI.Outln("Warning ***** Estimating topics from document files fail at the first try !");
 			try {
@@ -175,7 +185,7 @@ public class generateTopics extends SwingWorker {
 			} catch (Exception e2) {
 				FAA3_GUI.btnCancelMallet.setEnabled(false);
 				FAA3_GUI.btnEstimateTopics.setEnabled(true);
-				FAA3_GUI.Outln("Error ***** Estimating topics from document files fail at the second time also !");
+				FAA3_GUI.Outln("Error ***** Estimating topics from document files fail at the second time !");
 				FAA3_GUI.Outln(e2.toString());
 				e2.printStackTrace();
 				return -1;
@@ -183,7 +193,6 @@ public class generateTopics extends SwingWorker {
 		}
 
 		// Show the words and topics in the first instance
-
 		// The data alphabet maps word IDs to strings
 		dataAlphabet = instances.getDataAlphabet();
 
@@ -247,6 +256,7 @@ public class generateTopics extends SwingWorker {
 
 		FAA3_GUI.process_GenerateTopics_running = false;
 		FAA3_GUI.Outln(resultForConsole);
+		FAA3_GUI.btnSearchTopics.setEnabled(true);
 		return null;
 	}
 
@@ -374,14 +384,13 @@ public class generateTopics extends SwingWorker {
 
 		// Show top words in topics with proportions for the first document
 		for (int topic = 0; topic < numTopics; topic++) {
-			Iterator<IDSorter> iterator = topicSortedWords.get(topic).iterator();
-
 			out = new Formatter(new StringBuilder(), Locale.US);
 			outTopicsTextBox = new Formatter(new StringBuilder(), Locale.US);
 			out.format("%d    %.4f    ", topic, topicDistribution[topic]);
 			outTopicsTextBox.format("%d   ", topic);
-			int rank = 0;
 
+			int rank = 0;
+			Iterator<IDSorter> iterator = topicSortedWords.get(topic).iterator();
 			while (iterator.hasNext() && rank < NumberOfWordsInATopic) {
 				IDSorter idCountPair = iterator.next();
 				out.format("%s (%.0f) ", dataAlphabet.lookupObject(idCountPair.getID()), idCountPair.getWeight());
