@@ -325,7 +325,7 @@ public class generateTopics extends SwingWorker {
 
 	}
 
-	private static String Get_File_Name(String string) {
+	public static String Get_File_Name(String string) {
 		int vt = string.lastIndexOf('/');
 		String filename = string.substring(vt + 1);
 		return filename;

@@ -11,6 +11,7 @@ import org.xml.sax.SAXException;
 import cc.mallet.topics.ParallelTopicModel;
 import cc.mallet.types.Alphabet;
 import cc.mallet.types.IDSorter;
+import cc.mallet.types.Instance;
 import cc.mallet.types.InstanceList;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
@@ -66,6 +67,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 import java.awt.event.ActionEvent;
 import javax.swing.JProgressBar;
@@ -237,7 +239,14 @@ public class FAA3_GUI extends JFrame {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void initComponents() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(FAA3_GUI.class.getResource("/Resources/icon2.png")));
+		
+		try {
+			//	setIconImage(Toolkit.getDefaultToolkit().getImage(FAA3_GUI.class.getResource("/Resources/icon2.png")));
+			setIconImage(Toolkit.getDefaultToolkit().getImage("icons/icon2.png"));
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
 		setTitle("FAA");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 700);
@@ -458,8 +467,14 @@ public class FAA3_GUI extends JFrame {
 		btnXCancel = new JButton("Cancel");
 		btnXCancel.setEnabled(false);
 
-		btnXCancel.setIcon(new ImageIcon(FAA3_GUI.class.getResource("/Resources/cancel6_16x16.png")));
-
+		try {
+			//btnXCancel.setIcon(new ImageIcon(FAA3_GUI.class.getResource("/Resources/cancel6_16x16.png")));
+			btnXCancel.setIcon(new ImageIcon("icons/cancel6_16x16.png","Cancel"));
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		
 		txtDatatextfolder = new JTextField();
 
 		txtDatatextfolder.setEditable(false);
@@ -470,7 +485,7 @@ public class FAA3_GUI extends JFrame {
 
 		tglbtnUsedefaultdatatext.setSelected(true);
 
-		JLabel lblDefaultOutputText = new JLabel("Ues default output text folder:");
+		JLabel lblDefaultOutputText = new JLabel("Use default output text folder:");
 		lblDefaultOutputText.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		lblDefaultOutputText.setHorizontalAlignment(SwingConstants.RIGHT);
 		
@@ -661,7 +676,13 @@ public class FAA3_GUI extends JFrame {
 
 		btnCancelMallet = new JButton("Cancel");
 
-		btnCancelMallet.setIcon(new ImageIcon(FAA3_GUI.class.getResource("/Resources/cancel6_16x16.png")));
+		try {
+			//btnCancelMallet.setIcon(new ImageIcon(FAA3_GUI.class.getResource("/Resources/cancel6_16x16.png")));
+			btnCancelMallet.setIcon(new ImageIcon("icons/cancel6_16x16.png","cancel"));
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
 		btnCancelMallet.setEnabled(false);
 
 		JLabel lblNumberOfTop = new JLabel("Number of Top Words in a topic:");
@@ -971,16 +992,27 @@ public class FAA3_GUI extends JFrame {
 		});
 		scrollPane_8.setViewportView(list_2);
 		list_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
+
+		JButton button = new JButton("");
+		button.setBounds(334, 35, 26, 50);
+		panel_2.add(button);
+		try {
+			// button.setIcon(new ImageIcon(FAA3_GUI.class.getResource("/Resources/Up4.png")));
+			button.setIcon(new ImageIcon("icons/Up4.png", "Up"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		JButton button_1 = new JButton("");
+		button_1.setBounds(334, 109, 26, 50);
+		panel_2.add(button_1);
+		try {
+			// button_1.setIcon(new ImageIcon(FAA3_GUI.class.getResource("/Resources/down4.png")));
+			button_1.setIcon(new ImageIcon("icons/down4.png","down"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-				JButton button = new JButton("");
-				button.setBounds(334, 35, 26, 50);
-				panel_2.add(button);
-				button.setIcon(new ImageIcon(FAA3_GUI.class.getResource("/Resources/Up4.png")));
-				
-						JButton button_1 = new JButton("");
-						button_1.setBounds(334, 109, 26, 50);
-						panel_2.add(button_1);
-						button_1.setIcon(new ImageIcon(FAA3_GUI.class.getResource("/Resources/down4.png")));
 		panel_1.setLayout(null);
 		
 		JLabel lblTopicSearch = new JLabel("Topic Search:");
@@ -1000,7 +1032,7 @@ public class FAA3_GUI extends JFrame {
 		txSearchTopic.setHorizontalAlignment(SwingConstants.CENTER);
 		txSearchTopic.setBounds(6, 33, 342, 22);
 		txSearchTopic.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		txSearchTopic.setText("VFR");
+		txSearchTopic.setText("weather condition");
 		txSearchTopic.setColumns(32);
 		panel_1.add(txSearchTopic);
 		
@@ -1077,7 +1109,13 @@ public class FAA3_GUI extends JFrame {
 		JProgressBar progressBar_1 = new JProgressBar();
 		
 		JButton button_3 = new JButton("Cancel");
-		button_3.setIcon(new ImageIcon(FAA3_GUI.class.getResource("/Resources/cancel6_16x16.png")));
+		try {
+			//button_3.setIcon(new ImageIcon(FAA3_GUI.class.getResource("/Resources/cancel6_16x16.png")));
+			button_3.setIcon(new ImageIcon("icons/cancel6_16x16.png","cancel"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		button_3.setEnabled(false);
 		
 		JButton btnExtractWordsSterming = new JButton("Extract words sterming");
@@ -1511,7 +1549,7 @@ public class FAA3_GUI extends JFrame {
 		btnGetScore.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				removeTopicSearchFile(txtTextdatafolder.getText(),"P_N_Topic_Search.txt");
-				getTopicDocsScore("P_N_Topic_Search.txt", generateTopics.instances);
+				getTopicDocsScore("P_N_Topic_Search.txt", generateTopics.instances,txSearchTopic.getText());
 			}
 		});
 		
@@ -2178,11 +2216,71 @@ public class FAA3_GUI extends JFrame {
 		});
 
 	}
-	protected void getTopicDocsScore(String fileName, InstanceList instances) {
+	protected void getTopicDocsScore(String fileName, InstanceList instances, String searchText) {
 		// TODO Auto-generated method stub
 		// fileName, instances
-		suggestedDocumentsForATopic = new SuggestedDocumentsForATopic();
+		
+		String s;
+		
+		int topic_Search=0;
+		double maxProbabilities = 0;
+		int instanceID = 0;
+		for (Instance I : instances) {
+			s = generateTopics.Get_File_Name(I.getName().toString().replaceAll("%20", " "));
+			if (s.equalsIgnoreCase("P_N_Topic_Search.txt")) {
+				double[] Probabilities = generateTopics.model.getTopicProbabilities(instanceID);
+				
+				for (int topicID = 0; topicID < generateTopics.numTopics; topicID++) {
+					if ( maxProbabilities < Probabilities[topicID]) {
+						topic_Search = topicID;
+						maxProbabilities = Probabilities[topicID];
+					}
+						
+				}
+				break;
+			}
+			instanceID++;
+		}
+		
+		// found that "P_N_Topic_Search.txt" has max value of Probabilities at topic_Search
+		int n = instanceID;
+		String[] fileNames = new String[n] ;
+		double[] probs = new double[n];
+		int NN =-1;
+		instanceID = 0;
+		for (Instance I : instances) {
+			s = generateTopics.Get_File_Name(I.getName().toString().replaceAll("%20", " "));
+			if (!s.equalsIgnoreCase("P_N_Topic_Search.txt")) {
+				double prob = generateTopics.model.getTopicProbabilities(instanceID)[topic_Search];
+				
+					NN++;
+					fileNames[NN] = s;
+					probs[NN] = prob;
+				
+			}
+			instanceID++;
+		}
+		
+		/*for (int i=0 ; i<= NN;i++) {
+			System.out.println(fileNames[i]);
+			System.out.println(probs[i]);
+		}*/
+		for (int i=0; i<n-1; i++) {
+			for (int j = i+1; j<n ; j++) {
+				if (probs[i]<probs[j]) {
+					// Swap
+					String temName = fileNames[i];
+					fileNames[i] = fileNames[j];
+					fileNames[j] = temName;
+					double temProb = probs[i];
+					probs[i] = probs[j];
+					probs[j] = temProb;
+				}
+			}
+		}
+		suggestedDocumentsForATopic = new SuggestedDocumentsForATopic(searchText,fileNames, probs, topic_Search);
 		suggestedDocumentsForATopic.setVisible(true);
+		
 		
 	}
 
@@ -2324,16 +2422,11 @@ public class FAA3_GUI extends JFrame {
 			totalPages += pw1.getNumberOfPages(pf);
 			book.append(pw1, pf, pw1.getNumberOfPages(pf));
 
-			// 2nd table      ????????????????????????????????????????????????????????????????????????????????
-			//    https://stackoverflow.com/questions/14775753/printing-multiple-jtables-as-one-job-book-object-only-prints-1st-table 
-			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			Printable p2 = table.getPrintable(PrintMode.FIT_WIDTH, null, null);
 			PrintableWrapper pw2 = new PrintableWrapper(p2, totalPages);
 			totalPages += pw2.getNumberOfPages(pf);
 			book.append(pw2, pf, pw2.getNumberOfPages(pf));
 
-			
-			////////////??????????????????????????????????????????????????????????????????????????????????????
 			printer.setPageable(book);
 
 			if (printer.printDialog()) {

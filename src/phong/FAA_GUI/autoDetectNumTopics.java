@@ -171,7 +171,13 @@ public class autoDetectNumTopics extends JFrame {
 	private void initComponents() {
 		setTitle("Auto detect appropriate number of topics");
 		setResizable(false);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(autoDetectNumTopics.class.getResource("/Resources/icon2.png")));
+		try {
+			//setIconImage(Toolkit.getDefaultToolkit().getImage(autoDetectNumTopics.class.getResource("/Resources/icon2.png")));
+			setIconImage(Toolkit.getDefaultToolkit().getImage("icons/icon2.png"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE );
 		setBounds(100, 100, 533, 370);
 		contentPane = new JPanel();
