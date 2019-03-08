@@ -138,21 +138,29 @@ class createTextDataUsingTika extends SwingWorker {
 				 * + " : " + metadata.get(name)); }
 				 */
 				if (FAA3_GUI.process_createTextDataUsingTika.isCancelled()) { Out("The process of creating text data had been canceled by user  \n"); FAA3_GUI.btnExtractTextContents.setEnabled(true);FAA3_GUI.btnGetFiles.setEnabled(true); return -1; }
-				String language = identifyLanguage(s);
-				System.out.println("Language of text:" + language);
-				Out("Language of text:" + language + "\n");
-				if (FAA3_GUI.process_createTextDataUsingTika.isCancelled()) { Out("The process of creating text data had been canceled by user  \n"); FAA3_GUI.btnExtractTextContents.setEnabled(true);FAA3_GUI.btnGetFiles.setEnabled(true); return -1; }
-				if (FAA3_GUI.chckbxEnglishOnly.isSelected() & (! (language.equalsIgnoreCase("en") || language.equalsIgnoreCase("et")))  ) {
-					System.out.println("Warning: the content of the file:" + fileName
-							+ " have NOT been writen in English then this file will be ignored!");
+				
+				if (FAA3_GUI.chckbxLetterOnly.isSelected()) {
+					s = TextProcessing.getWordsWithLetterOnly(s);
+				}
+				
+				
+				if (FAA3_GUI.chckbxEnglishOnly.isSelected() ) {
+					String language;
+					language = identifyLanguage(s);
+					System.out.println("Language of text:" + language);
+					Out("Language of text:" + language + "\n");
+					if ((! (language.equalsIgnoreCase("en") || language.equalsIgnoreCase("et")))  ) {
+						System.out.println("Warning: the content of the file:" + fileName
+								+ " have NOT been writen in English then this file will be ignored!");
 
-					Outln("Warning: the content of the file:" + fileName
-							+ " have NOT been writen in English then this file will be ignored!");
-					fileValues[count] =  (count+1) + " [" + language + "]________ " + fileName;
-					FAA3_GUI.JListOfFiles.add(count, fileValues[count]);
-					count ++;
-					
-				} else {
+						Outln("Warning: the content of the file:" + fileName
+								+ " have NOT been writen in English then this file will be ignored!");
+						fileValues[count] =  (count+1) + " [" + language + "]________ " + fileName;
+						FAA3_GUI.JListOfFiles.add(count, fileValues[count]);
+						count ++;
+					}
+				}
+				else {
 					// System.out.println(s);
 					Writer writer = null;
 					try {
@@ -160,7 +168,7 @@ class createTextDataUsingTika extends SwingWorker {
 								new FileOutputStream( outputFolderName + "/" + fileName + ".txt"), "utf-8"));
 						writer.write(s);
 						
-						fileValues[count] =  (count+1) + "   [" + language + "]:  " + fileName;
+						fileValues[count] =  (count+1) + " : " + fileName;
 						FAA3_GUI.JListOfFiles.add(count, fileValues[count]);
 						count ++;
 						

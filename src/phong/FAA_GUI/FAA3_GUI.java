@@ -216,6 +216,7 @@ public class FAA3_GUI extends JFrame {
 	public static JButton btnSearchTopics;
 	private JButton btnEstimateTopicsSimilar;
 	private JButton btnGetScore;
+	public static  JCheckBox chckbxLetterOnly;
 
 	public void InitWordnet(String wnhome) throws IOException {
 
@@ -500,7 +501,8 @@ public class FAA3_GUI extends JFrame {
 		txtContentstopwordstxt.setText("ContentStopwords.txt");
 		txtContentstopwordstxt.setColumns(10);
 		
-		JCheckBox chckbxRemoveWordWith = new JCheckBox("Remove word with number");
+		chckbxLetterOnly = new JCheckBox("Words with letter only");
+		chckbxLetterOnly.setSelected(true);
 		GroupLayout gl_layeredPane = new GroupLayout(layeredPane);
 		gl_layeredPane.setHorizontalGroup(
 			gl_layeredPane.createParallelGroup(Alignment.TRAILING)
@@ -529,7 +531,7 @@ public class FAA3_GUI extends JFrame {
 									.addGap(18)
 									.addComponent(txtContentstopwordstxt, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE))
 								.addComponent(chckbxRemoveSpecialCharacters, GroupLayout.PREFERRED_SIZE, 296, GroupLayout.PREFERRED_SIZE)
-								.addComponent(chckbxRemoveWordWith, GroupLayout.PREFERRED_SIZE, 213, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(chckbxLetterOnly, GroupLayout.PREFERRED_SIZE, 213, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_layeredPane.createSequentialGroup()
 							.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 1063, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -579,7 +581,7 @@ public class FAA3_GUI extends JFrame {
 									.addComponent(chckbxRemoveStopwords)
 									.addComponent(txtContentstopwordstxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGap(13)
-								.addComponent(chckbxRemoveWordWith))))
+								.addComponent(chckbxLetterOnly))))
 					.addGap(10)
 					.addGroup(gl_layeredPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnNew)
@@ -1029,6 +1031,13 @@ public class FAA3_GUI extends JFrame {
 		panel_1.add(btnSearchTopics);
 		
 		txSearchTopic = new JTextField();
+		txSearchTopic.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				btnGetScore.setEnabled(false);
+				
+			}
+		});
 		txSearchTopic.setHorizontalAlignment(SwingConstants.CENTER);
 		txSearchTopic.setBounds(6, 33, 342, 22);
 		txSearchTopic.setFont(new Font("Tahoma", Font.PLAIN, 13));
