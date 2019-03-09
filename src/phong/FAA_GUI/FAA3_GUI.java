@@ -861,7 +861,7 @@ public class FAA3_GUI extends JFrame {
 					.addGap(42))
 				.addGroup(gl_layeredPane_1.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 336, GroupLayout.PREFERRED_SIZE)
+					.addComponent(scrollPane_3, GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
 					.addGap(21)
 					.addComponent(scrollPane_4, GroupLayout.DEFAULT_SIZE, 791, Short.MAX_VALUE)
 					.addContainerGap())

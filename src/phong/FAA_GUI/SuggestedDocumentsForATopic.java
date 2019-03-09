@@ -35,6 +35,8 @@ import cc.mallet.types.IDSorter;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.JTextPane;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 
 
 /**
@@ -53,6 +55,8 @@ public class SuggestedDocumentsForATopic extends JFrame{
 	private JLabel lblListOfWords;
 	private JScrollPane scrollPane_1;
 	private JTextArea textArea;
+	private JTextField txtHttplocalhostsolrknowledgearchitecturehtml;
+	private JButton btnNewButton;
 	
 	public SuggestedDocumentsForATopic() {
 		
@@ -118,6 +122,13 @@ public class SuggestedDocumentsForATopic extends JFrame{
 
 
 	private void createEvents() {
+		
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				GetRelatedTopicsOnSolr relatedTopicsOnSolr = new GetRelatedTopicsOnSolr();
+			}
+		});
+		
 		spinnerDigit.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int exp;
@@ -134,7 +145,6 @@ public class SuggestedDocumentsForATopic extends JFrame{
 					exp --;
 					format += "0";
 				} while (exp > 0);
-				
 				
 				decimalFormat = new DecimalFormat(format);
 				String numberAsString = decimalFormat.format(min);
@@ -153,67 +163,155 @@ public class SuggestedDocumentsForATopic extends JFrame{
 			e.printStackTrace();
 		}
 		
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE );
-		setBounds(100, 100, 554, 601);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE );
+		setBounds(100, 100, 800, 601);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
 		
 		JLabel lblSuggestedDocumentsFor = new JLabel("Suggested Documents for :");
 		lblSuggestedDocumentsFor.setHorizontalAlignment(SwingConstants.LEFT);
-		lblSuggestedDocumentsFor.setBounds(30, 11, 149, 14);
-		contentPane.add(lblSuggestedDocumentsFor);
 		
 		textField = new JTextField();
+		textField.setEditable(false);
 		textField.setHorizontalAlignment(SwingConstants.LEFT);
-		textField.setBounds(183, 8, 321, 20);
-		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		listDocs = new JList(listModel);
 		
 		listDocs.setVisibleRowCount(10);
 		JScrollPane scrollPane = new JScrollPane(listDocs);
-		scrollPane.setBounds(30, 62, 474, 137);
-		contentPane.add(scrollPane);
 		
 		JLabel lblMinimumProbabilityScore = new JLabel("Minimum probability score:");
 		lblMinimumProbabilityScore.setHorizontalAlignment(SwingConstants.LEFT);
-		lblMinimumProbabilityScore.setBounds(30, 36, 149, 14);
-		contentPane.add(lblMinimumProbabilityScore);
 		
 		spinnerDigit = new JSpinner();
 		spinnerDigit.setEnabled(false);
 		
 		spinnerDigit.setModel(new SpinnerNumberModel(4, 1, 8, 1));
-		spinnerDigit.setBounds(466, 33, 38, 20);
-		contentPane.add(spinnerDigit);
 		
 		textField_MinProb = new JTextField();
 		textField_MinProb.setText("0.0005");
 		textField_MinProb.setEditable(false);
-		textField_MinProb.setBounds(183, 33, 86, 20);
-		contentPane.add(textField_MinProb);
 		textField_MinProb.setColumns(10);
 		
 		JLabel lblNumberOfDigit = new JLabel("number of digit after decimal");
 		lblNumberOfDigit.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNumberOfDigit.setBounds(300, 37, 163, 14);
-		contentPane.add(lblNumberOfDigit);
 		
 		textArea = new JTextArea();
 		textArea.setLineWrap(true);
-		textArea.setRows(14);
+		textArea.setRows(10);
 		
 		scrollPane_1 = new JScrollPane(textArea);
-		scrollPane_1.setBounds(29, 246, 475, 267);
-		contentPane.add(scrollPane_1);
 		
 		lblListOfWords = new JLabel("List of words in the topic:");
 		lblListOfWords.setHorizontalAlignment(SwingConstants.CENTER);
-		lblListOfWords.setBounds(30, 221, 474, 14);
-		contentPane.add(lblListOfWords);
+		
+		JPanel panel = new JPanel();
+		
+		JLabel lblNewLabel = new JLabel("Knowledge Architecture results on Solr");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		txtHttplocalhostsolrknowledgearchitecturehtml = new JTextField();
+		txtHttplocalhostsolrknowledgearchitecturehtml.setHorizontalAlignment(SwingConstants.LEFT);
+		txtHttplocalhostsolrknowledgearchitecturehtml.setText("http://localhost:8983/solr/knowledgeArchitecture.html");
+		txtHttplocalhostsolrknowledgearchitecturehtml.setColumns(10);
+		
+		btnNewButton = new JButton("Get Related Topics on Solr");
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(25)
+					.addComponent(lblSuggestedDocumentsFor, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
+					.addGap(10)
+					.addComponent(textField, GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
+					.addGap(27))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(25)
+					.addComponent(lblMinimumProbabilityScore, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
+					.addGap(10)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(textField_MinProb, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(87)
+							.addComponent(lblNumberOfDigit, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)))
+					.addGap(3)
+					.addComponent(spinnerDigit, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(25)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 722, Short.MAX_VALUE)
+					.addGap(27))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(25)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 722, Short.MAX_VALUE)
+					.addGap(27))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+							.addGap(24)
+							.addComponent(scrollPane_1))
+						.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+							.addGap(25)
+							.addComponent(lblListOfWords, GroupLayout.PREFERRED_SIZE, 722, GroupLayout.PREFERRED_SIZE)))
+					.addGap(27))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(3)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(lblSuggestedDocumentsFor))
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(5)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(lblMinimumProbabilityScore))
+						.addComponent(textField_MinProb, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(4)
+							.addComponent(lblNumberOfDigit))
+						.addComponent(spinnerDigit, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(9)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+					.addGap(11)
+					.addComponent(lblListOfWords)
+					.addGap(11)
+					.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+					.addGap(21)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
+					.addGap(6))
+		);
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(10)
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 214, GroupLayout.PREFERRED_SIZE)
+							.addGap(2)
+							.addComponent(txtHttplocalhostsolrknowledgearchitecturehtml, GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE))
+						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE))
+					.addGap(10))
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(8)
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addGap(3)
+							.addComponent(lblNewLabel))
+						.addComponent(txtHttplocalhostsolrknowledgearchitecturehtml, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(8)
+					.addComponent(btnNewButton))
+		);
+		panel.setLayout(gl_panel);
+		contentPane.setLayout(gl_contentPane);
 		
 	}
 
