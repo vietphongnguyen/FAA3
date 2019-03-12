@@ -4,6 +4,7 @@
 package phong.FAA_GUI;
 
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
@@ -18,6 +19,8 @@ import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
 import java.awt.Component;
+import java.awt.Dimension;
+
 import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -39,7 +42,7 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 	private JComboBox comboBox_1;
 	private JList list;
 	private JComboBox comboBox_2;
-	private JTextArea textArea;
+	private JTextArea textArea_words;
 	private JList list_1;
 	private JButton button_1;
 
@@ -95,7 +98,17 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 			e.printStackTrace();
 		}
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE );
-		setBounds(300, 100, 1000, 600);
+		setBounds(600, 300, 1000, 600);
+		
+		try {
+			Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+			int x = (int) ((dimension.getWidth() - getWidth()) );
+			if (x<0)  x =0;
+			int y = (int) ((dimension.getHeight() - getHeight()) ) - 50; // 50 is about the height of the window start bar
+			if (y<0)  y =0;
+			setLocation(x,y);
+		} catch (HeadlessException e2) {}
+		
 		JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -108,17 +121,17 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE))
+					.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 526, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 526, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(35, Short.MAX_VALUE))
+						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
+						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE))
+					.addGap(25))
 		);
 		list_1 = new JList();
 		JScrollPane scrollPane_1 = new JScrollPane(list_1);
@@ -134,34 +147,38 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 		
 		button_1 = new JButton("Filter");
 		
-		textArea = new JTextArea();
+		textArea_words = new JTextArea();
+		textArea_words.setLineWrap(true);
+		textArea_words.setText(SuggestedDocumentsForATopic.textArea_words.getText());
+		//SuggestedDocumentsForATopic.textArea_words
 		
-		JScrollPane scrollPane_2 = new JScrollPane(textArea);
+		JScrollPane scrollPane_2 = new JScrollPane(textArea_words);
 		
 		comboBox_2 = new JComboBox();
-		comboBox_2.setModel(new DefaultComboBoxModel(new String[] {"Nonradar terminal control", "Perform handoff", "Evaluate weather condition", "Maintain separation", "VFR"}));
 		comboBox_2.setEditable(true);
+		//comboBox_2.setModel(new DefaultComboBoxModel(new String[] {"Nonradar terminal control", "Perform handoff", "Evaluate weather condition", "Maintain separation", "VFR"}));
+		comboBox_2.setModel(new DefaultComboBoxModel(new String[] {FAA3_GUI.txSearchTopic.getText()}		));
+		
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(
 			gl_panel_1.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_1.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+						.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
 						.addGroup(gl_panel_1.createSequentialGroup()
 							.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
 								.addComponent(label_3, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
 								.addComponent(button_1, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE))
-						.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panel_1.createSequentialGroup()
-								.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
-								.addGap(6)
-								.addComponent(comboBox_2, 0, 387, Short.MAX_VALUE))
-							.addGroup(gl_panel_1.createSequentialGroup()
-								.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
-								.addGap(4))))
+							.addComponent(scrollPane_2))
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+							.addGap(6)
+							.addComponent(comboBox_2, 0, 377, Short.MAX_VALUE))
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+							.addGap(4)))
 					.addContainerGap())
 		);
 		gl_panel_1.setVerticalGroup(
@@ -183,10 +200,10 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 							.addComponent(button_1))
 						.addGroup(gl_panel_1.createSequentialGroup()
 							.addGap(6)
-							.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(209, Short.MAX_VALUE))
+					.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+					.addGap(207))
 		);
 		
 		
@@ -230,10 +247,10 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panel.createSequentialGroup()
+				.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(label, GroupLayout.PREFERRED_SIZE, 214, GroupLayout.PREFERRED_SIZE)
+						.addComponent(label, GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
 						.addGroup(gl_panel.createSequentialGroup()
 							.addComponent(lblSolrServer, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -255,6 +272,7 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 				.addGroup(gl_panel.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(label)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGap(9)
@@ -276,8 +294,8 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 					.addGap(18)
 					.addComponent(button)
 					.addGap(18)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(217, Short.MAX_VALUE))
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+					.addGap(217))
 		);
 		
 		

@@ -3,7 +3,9 @@
  */
 package phong.FAA_GUI;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
@@ -37,6 +39,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.JTextPane;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 
 /**
@@ -54,7 +57,7 @@ public class SuggestedDocumentsForATopic extends JFrame{
 	DecimalFormat decimalFormat;
 	private JLabel lblListOfWords;
 	private JScrollPane scrollPane_1;
-	private JTextArea textArea;
+	static JTextArea textArea_words;
 	private JTextField txtHttplocalhostsolrknowledgearchitecturehtml;
 	private JButton btnNewButton;
 	
@@ -116,7 +119,7 @@ public class SuggestedDocumentsForATopic extends JFrame{
 			
 		}
 		
-		textArea.setText(output);
+		textArea_words.setText(output);
 	}
 
 
@@ -126,6 +129,7 @@ public class SuggestedDocumentsForATopic extends JFrame{
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				GetRelatedTopicsOnSolr relatedTopicsOnSolr = new GetRelatedTopicsOnSolr();
+				//setVisible(false);
 			}
 		});
 		
@@ -164,7 +168,16 @@ public class SuggestedDocumentsForATopic extends JFrame{
 		}
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE );
-		setBounds(100, 100, 800, 601);
+		setBounds(0, 200, 800, 600);
+		
+		try {
+			Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+			//int x = (int) ((dimension.getWidth() - getWidth()) / 2);
+			int y = (int) ((dimension.getHeight() - getHeight()) ) - 50; // 50 is about the height of the window start bar
+			if (y<0)  y =0;
+			setLocation(0,y);
+		} catch (HeadlessException e2) {}
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -198,11 +211,11 @@ public class SuggestedDocumentsForATopic extends JFrame{
 		JLabel lblNumberOfDigit = new JLabel("number of digit after decimal");
 		lblNumberOfDigit.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		textArea = new JTextArea();
-		textArea.setLineWrap(true);
-		textArea.setRows(10);
+		textArea_words = new JTextArea();
+		textArea_words.setLineWrap(true);
+		textArea_words.setRows(10);
 		
-		scrollPane_1 = new JScrollPane(textArea);
+		scrollPane_1 = new JScrollPane(textArea_words);
 		
 		lblListOfWords = new JLabel("List of words in the topic:");
 		lblListOfWords.setHorizontalAlignment(SwingConstants.CENTER);
@@ -291,24 +304,26 @@ public class SuggestedDocumentsForATopic extends JFrame{
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGap(10)
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createSequentialGroup()
-							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 214, GroupLayout.PREFERRED_SIZE)
-							.addGap(2)
-							.addComponent(txtHttplocalhostsolrknowledgearchitecturehtml, GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE))
-						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE))
-					.addGap(10))
+						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE)
+						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 245, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(txtHttplocalhostsolrknowledgearchitecturehtml, GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)))
+					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(8)
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
-							.addGap(3)
-							.addComponent(lblNewLabel))
-						.addComponent(txtHttplocalhostsolrknowledgearchitecturehtml, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(8)
-					.addComponent(btnNewButton))
+							.addContainerGap()
+							.addComponent(lblNewLabel)
+							.addGap(11)
+							.addComponent(btnNewButton))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addGap(8)
+							.addComponent(txtHttplocalhostsolrknowledgearchitecturehtml, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(39, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);

@@ -77,6 +77,7 @@ import javax.swing.JToggleButton;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.HeadlessException;
 
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeListener;
@@ -98,6 +99,8 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
+import java.awt.Dimension;
+
 import javax.swing.JTable;
 import javax.swing.JTable.PrintMode;
 import javax.swing.table.DefaultTableModel;
@@ -211,7 +214,7 @@ public class FAA3_GUI extends JFrame {
 	public static JCheckBox chckbxEnglishOnly;
 	private JTextField txtContentstopwordstxt;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private JTextField txSearchTopic;
+	static JTextField txSearchTopic;
 	public static JCheckBoxMenuItem chckbxmntmAutoClearAfter;
 	public static JButton btnSearchTopics;
 	private JButton btnEstimateTopicsSimilar;
@@ -250,8 +253,15 @@ public class FAA3_GUI extends JFrame {
 		
 		setTitle("FAA");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1200, 700);
-
+		setBounds(100, 0, 1200, 700);
+		
+		try {
+			Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+			int x = (int) ((dimension.getWidth() - getWidth()) / 2);
+			int y = (int) ((dimension.getHeight() - getHeight()) / 2);
+			setLocation(x, 0);
+		} catch (HeadlessException e2) {}
+		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
@@ -668,7 +678,7 @@ public class FAA3_GUI extends JFrame {
 		spinnerNumOfIterations = new JSpinner();
 		
 		spinnerNumOfIterations.setToolTipText("for testing only: you could use about 50 iterations , for real applications: use 1000 to 2000 iterations");
-		spinnerNumOfIterations.setModel(new SpinnerNumberModel(1500, 1, 10000, 1));
+		spinnerNumOfIterations.setModel(new SpinnerNumberModel(200, 1, 10000, 1));
 
 		btnEstimateTopics = new JButton("Estimate topics");
 
