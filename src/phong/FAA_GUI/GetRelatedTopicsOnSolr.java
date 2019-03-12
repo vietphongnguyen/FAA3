@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import java.awt.Component;
 import javax.swing.JList;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -43,6 +44,7 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 	private JButton button_1;
 
 	DefaultListModel listSolr;
+	private JComboBox comboBox_HtmlFile;
 	
 	/**
 	 * 
@@ -57,9 +59,20 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
+				Solr_KnowledgeArchitectureHTMLFile sKA =  new Solr_KnowledgeArchitectureHTMLFile(comboBox_HtmlFile.getSelectedItem().toString());
+				displayListSolr(sKA.getRelatedTopics());
+				
+				
 				// getHTML("http://localhost:8983/solr/knowledgeArchitecture.html?query=perform+handoff");
-				HTML html = new HTML(comboBox.getSelectedItem().toString() + "?query=" + comboBox_1.getSelectedItem().toString());
-				displayListSolr(html.getRelatedTopics());
+				HTML html;
+				try {
+					html = new HTML(comboBox.getSelectedItem().toString() + "?query=" + comboBox_1.getSelectedItem().toString());
+					displayListSolr(html.getRelatedTopics());
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 				
 			}
 		});
@@ -197,33 +210,44 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 		JLabel label_1 = new JLabel("Topic Search");
 		label_1.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		JLabel label_2 = new JLabel("Solr address: ");
-		label_2.setHorizontalAlignment(SwingConstants.LEFT);
+		JLabel lblSolrServer = new JLabel("Solr server");
+		lblSolrServer.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"http://localhost:8983/solr/knowledgeArchitecture.html", "http://130.101.10.139:8983/solr/knowledgeArchitecture.html", "http://"}));
 		comboBox.setEditable(true);
 		
 		comboBox_1 = new JComboBox();
-		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Nonradar terminal control", "Perform handoff", "Evaluate weather condition", "Maintain separation", "VFR"}));
+		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"weather condition", "Evaluate weather condition", "Nonradar terminal control", "Perform handoff", "Maintain separation", "VFR"}));
 		comboBox_1.setEditable(true);
+		
+		JLabel lblSolrHtmlOutput = new JLabel("Solr HTML output");
+		lblSolrHtmlOutput.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		comboBox_HtmlFile = new JComboBox();
+		comboBox_HtmlFile.setModel(new DefaultComboBoxModel(new String[] {"weather condition.html"}));
+		comboBox_HtmlFile.setEditable(true);
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+			gl_panel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
-						.addComponent(label, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 214, GroupLayout.PREFERRED_SIZE)
-						.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
-							.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(label, GroupLayout.PREFERRED_SIZE, 214, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblSolrServer, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(comboBox, 0, 352, Short.MAX_VALUE))
-						.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
+						.addGroup(gl_panel.createSequentialGroup()
 							.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(comboBox_1, 0, 352, Short.MAX_VALUE))
-						.addComponent(button, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblSolrHtmlOutput, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(comboBox_HtmlFile, 0, 352, Short.MAX_VALUE))
+						.addComponent(button, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE)
+						.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
@@ -234,7 +258,7 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGap(9)
-							.addComponent(label_2))
+							.addComponent(lblSolrServer))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGap(6)
 							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
@@ -242,11 +266,18 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(label_1)
 						.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(13)
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addGap(14)
+							.addComponent(lblSolrHtmlOutput))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(comboBox_HtmlFile, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addGap(18)
 					.addComponent(button)
-					.addGap(59)
+					.addGap(18)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(212, Short.MAX_VALUE))
+					.addContainerGap(217, Short.MAX_VALUE))
 		);
 		
 		

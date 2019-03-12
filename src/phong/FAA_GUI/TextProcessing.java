@@ -53,7 +53,7 @@ public class TextProcessing {
 		Character ch;
 		for (int i = 0; i< text.length(); i++) {
 			ch = text.charAt(i);
-			if (Character.isLetterOrDigit(ch)  ||  ch == ' '	)
+			if (Character.isLetterOrDigit(ch)  )
 				output += ch;
 			else output += " ";
 		}
@@ -193,6 +193,19 @@ public class TextProcessing {
 			space = true;	// for every other special characters -> let's consider as a space
 		}
 		
+		return output;
+	}
+
+	public static String getNumber(String text) {
+		String output="";
+		Character ch;
+		for (int i = 0; i< text.length(); i++) {
+			ch = text.charAt(i);
+			if (Character.isDigit(ch)  )
+				output += ch;
+			else output += " ";
+		}
+		output = removeDuplicateSpace(output);
 		return output;
 	}
 
