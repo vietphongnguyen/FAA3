@@ -115,6 +115,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.border.BevelBorder;
 
 public class FAA3_GUI extends JFrame {
 
@@ -219,7 +222,15 @@ public class FAA3_GUI extends JFrame {
 	public static JButton btnSearchTopics;
 	private JButton btnEstimateTopicsSimilar;
 	private JButton btnGetScore;
-	public static  JCheckBox chckbxLetterOnly;
+	private JTextField txtCfaamainphrases;
+	private JCheckBox checkBox_LetterOnly;
+	private JSpinner spinner_fromCharacter;
+	private JSpinner spinner_ToCharacter;
+	private JCheckBox chckbxAlsoParseThe;
+	private JComboBox comboBox_2;
+	private JComboBox comboBox_3;
+	private JComboBox comboBox;
+	private JComboBox comboBox_1;
 
 	public void InitWordnet(String wnhome) throws IOException {
 
@@ -508,11 +519,15 @@ public class FAA3_GUI extends JFrame {
 		JCheckBox chckbxRemoveStopwords = new JCheckBox("Remove Stopwords");
 		
 		txtContentstopwordstxt = new JTextField();
+		txtContentstopwordstxt.setEnabled(false);
 		txtContentstopwordstxt.setText("ContentStopwords.txt");
 		txtContentstopwordstxt.setColumns(10);
 		
-		chckbxLetterOnly = new JCheckBox("Words with letter only");
-		chckbxLetterOnly.setSelected(true);
+		JPanel panel_3 = new JPanel();
+		panel_3.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		
+		JPanel panel_4 = new JPanel();
+		panel_4.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		GroupLayout gl_layeredPane = new GroupLayout(layeredPane);
 		gl_layeredPane.setHorizontalGroup(
 			gl_layeredPane.createParallelGroup(Alignment.TRAILING)
@@ -536,14 +551,15 @@ public class FAA3_GUI extends JFrame {
 							.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 304, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
 							.addGroup(gl_layeredPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 477, GroupLayout.PREFERRED_SIZE)
 								.addGroup(gl_layeredPane.createSequentialGroup()
 									.addComponent(chckbxRemoveStopwords, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
 									.addGap(18)
 									.addComponent(txtContentstopwordstxt, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE))
 								.addComponent(chckbxRemoveSpecialCharacters, GroupLayout.PREFERRED_SIZE, 296, GroupLayout.PREFERRED_SIZE)
-								.addComponent(chckbxLetterOnly, GroupLayout.PREFERRED_SIZE, 213, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 478, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_layeredPane.createSequentialGroup()
-							.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 1063, Short.MAX_VALUE)
+							.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 1053, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnXCancel, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_layeredPane.createSequentialGroup()
@@ -590,8 +606,11 @@ public class FAA3_GUI extends JFrame {
 								.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE)
 									.addComponent(chckbxRemoveStopwords)
 									.addComponent(txtContentstopwordstxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(13)
-								.addComponent(chckbxLetterOnly))))
+								.addGap(11)
+								.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+								.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
+								.addGap(32))))
 					.addGap(10)
 					.addGroup(gl_layeredPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnNew)
@@ -610,6 +629,141 @@ public class FAA3_GUI extends JFrame {
 						.addComponent(btnXCancel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 					.addContainerGap())
 		);
+		
+		checkBox_LetterOnly = new JCheckBox("Words with letter only");
+		
+		checkBox_LetterOnly.setSelected(true);
+		
+		JLabel lblOnlyFrom = new JLabel("From ");
+		lblOnlyFrom.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		spinner_fromCharacter = new JSpinner();
+		spinner_fromCharacter.setModel(new SpinnerNumberModel(2, 1, 3, 1));
+		
+		JLabel lblTo = new JLabel("To");
+		lblTo.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		spinner_ToCharacter = new JSpinner();
+		spinner_ToCharacter.setModel(new SpinnerNumberModel(30, 10, 150, 10));
+		
+		JLabel lblCharacters = new JLabel("Characters");
+		GroupLayout gl_panel_4 = new GroupLayout(panel_4);
+		gl_panel_4.setHorizontalGroup(
+			gl_panel_4.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_4.createSequentialGroup()
+					.addGap(12)
+					.addComponent(checkBox_LetterOnly, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblOnlyFrom, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(spinner_fromCharacter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblTo, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(spinner_ToCharacter, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblCharacters, GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		gl_panel_4.setVerticalGroup(
+			gl_panel_4.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_4.createSequentialGroup()
+					.addGroup(gl_panel_4.createParallelGroup(Alignment.BASELINE)
+						.addComponent(checkBox_LetterOnly)
+						.addComponent(lblOnlyFrom)
+						.addComponent(lblCharacters)
+						.addComponent(spinner_fromCharacter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblTo)
+						.addComponent(spinner_ToCharacter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(10, Short.MAX_VALUE))
+		);
+		panel_4.setLayout(gl_panel_4);
+		
+		chckbxAlsoParseThe = new JCheckBox("Parse the header and title phrases");
+		
+		chckbxAlsoParseThe.setSelected(true);
+		
+		txtCfaamainphrases = new JTextField();
+		txtCfaamainphrases.setText("C:\\FAA3\\main_phrases");
+		txtCfaamainphrases.setColumns(10);
+		
+		JLabel lblMaximumLevelOf = new JLabel("Max level of text size");
+		
+		comboBox = new JComboBox();
+		comboBox.setEditable(true);
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"auto", "4", "6", "8 ", "any"}));
+		
+		JLabel lblMaximumWordsFor = new JLabel("Max words for a phrases");
+		
+		comboBox_1 = new JComboBox();
+		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"auto", "10", "15", "20", "any"}));
+		comboBox_1.setEditable(true);
+		
+		JLabel lblFromPageNumber = new JLabel("From page number");
+		
+		comboBox_2 = new JComboBox();
+		comboBox_2.setModel(new DefaultComboBoxModel(new String[] {"auto", "1", "2", "3"}));
+		comboBox_2.setEditable(true);
+		
+		JLabel lblToPageNumber = new JLabel("To page number");
+		
+		comboBox_3 = new JComboBox();
+		comboBox_3.setModel(new DefaultComboBoxModel(new String[] {"auto", "5", "10", "15", "20", "30", "40", "50", "100", "all"}));
+		comboBox_3.setEditable(true);
+		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
+		gl_panel_3.setHorizontalGroup(
+			gl_panel_3.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_3.createSequentialGroup()
+					.addGap(12)
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_3.createSequentialGroup()
+							.addComponent(lblMaximumLevelOf, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(lblMaximumWordsFor, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel_3.createSequentialGroup()
+								.addComponent(chckbxAlsoParseThe, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(txtCfaamainphrases, GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
+							.addGroup(gl_panel_3.createSequentialGroup()
+								.addComponent(lblFromPageNumber, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE)
+								.addGap(4)
+								.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+								.addGap(24)
+								.addComponent(lblToPageNumber, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+								.addGap(4)
+								.addComponent(comboBox_3, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))))
+					.addGap(8))
+		);
+		gl_panel_3.setVerticalGroup(
+			gl_panel_3.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_3.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
+						.addComponent(chckbxAlsoParseThe)
+						.addComponent(txtCfaamainphrases, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblFromPageNumber, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_panel_3.createSequentialGroup()
+							.addGap(3)
+							.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblToPageNumber, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboBox_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblMaximumLevelOf, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblMaximumWordsFor, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+						.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(59))
+		);
+		panel_3.setLayout(gl_panel_3);
 		layeredPane.setLayout(gl_layeredPane);
 
 		layeredPane_1 = new JLayeredPane();
@@ -1565,6 +1719,36 @@ public class FAA3_GUI extends JFrame {
 	
 	private void createEvents() {
 
+		chckbxAlsoParseThe.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (chckbxAlsoParseThe.isSelected()) {
+					txtCfaamainphrases.setEnabled(true);
+					comboBox_2.setEnabled(true);
+					comboBox.setEnabled(true);
+					comboBox_3.setEnabled(true);
+					comboBox_1.setEnabled(true);
+				} else {
+					txtCfaamainphrases.setEnabled(false);
+					comboBox_2.setEnabled(false);
+					comboBox.setEnabled(false);
+					comboBox_3.setEnabled(false);
+					comboBox_1.setEnabled(false);
+				}
+			}
+		});
+		
+		checkBox_LetterOnly.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				if (checkBox_LetterOnly.isSelected()) {
+					spinner_fromCharacter.setEnabled(true);
+					spinner_ToCharacter.setEnabled(true);
+				} else {
+					spinner_fromCharacter.setEnabled(false);
+					spinner_ToCharacter.setEnabled(false);
+				}
+			}
+		});
+		
 		btnGetScore.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				removeTopicSearchFile(txtTextdatafolder.getText(),"P_N_Topic_Search.txt");
