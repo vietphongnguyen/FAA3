@@ -139,10 +139,14 @@ class createTextDataUsingTika extends SwingWorker {
 				 */
 				if (FAA3_GUI.process_createTextDataUsingTika.isCancelled()) { Out("The process of creating text data had been canceled by user  \n"); FAA3_GUI.btnExtractTextContents.setEnabled(true);FAA3_GUI.btnGetFiles.setEnabled(true); return -1; }
 				
-				if (FAA3_GUI.chckbxLetterOnly.isSelected()) {
+				if (FAA3_GUI.checkBox_LetterOnly.isSelected()) {
 					s = TextProcessing.getWordsWithLetterOnly(s);
 				}
 				
+				if (FAA3_GUI.chckbxAlsoParseThe.isSelected()) {
+					ParseHeaderPhrases headerPhrases = new ParseHeaderPhrases(file,FAA3_GUI.txtCfaamainphrases.getText(),
+							FAA3_GUI.comboBox_FromPage.getSelectedItem().toString(),FAA3_GUI.comboBox_ToPage.getSelectedItem().toString() );
+				}
 				
 				if (FAA3_GUI.chckbxEnglishOnly.isSelected() ) {
 					String language;

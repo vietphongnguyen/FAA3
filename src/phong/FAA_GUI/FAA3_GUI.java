@@ -222,13 +222,13 @@ public class FAA3_GUI extends JFrame {
 	public static JButton btnSearchTopics;
 	private JButton btnEstimateTopicsSimilar;
 	private JButton btnGetScore;
-	private JTextField txtCfaamainphrases;
-	private JCheckBox checkBox_LetterOnly;
+	static JTextField txtCfaamainphrases;
+	static JCheckBox checkBox_LetterOnly;
 	private JSpinner spinner_fromCharacter;
 	private JSpinner spinner_ToCharacter;
-	private JCheckBox chckbxAlsoParseThe;
-	private JComboBox comboBox_2;
-	private JComboBox comboBox_3;
+	static JCheckBox chckbxAlsoParseThe;
+	static JComboBox comboBox_FromPage;
+	static JComboBox comboBox_ToPage;
 	private JComboBox comboBox;
 	private JComboBox comboBox_1;
 
@@ -701,15 +701,15 @@ public class FAA3_GUI extends JFrame {
 		
 		JLabel lblFromPageNumber = new JLabel("From page number");
 		
-		comboBox_2 = new JComboBox();
-		comboBox_2.setModel(new DefaultComboBoxModel(new String[] {"auto", "1", "2", "3"}));
-		comboBox_2.setEditable(true);
+		comboBox_FromPage = new JComboBox();
+		comboBox_FromPage.setModel(new DefaultComboBoxModel(new String[] {"auto", "1", "2", "3"}));
+		comboBox_FromPage.setEditable(true);
 		
 		JLabel lblToPageNumber = new JLabel("To page number");
 		
-		comboBox_3 = new JComboBox();
-		comboBox_3.setModel(new DefaultComboBoxModel(new String[] {"auto", "5", "10", "15", "20", "30", "40", "50", "100", "all"}));
-		comboBox_3.setEditable(true);
+		comboBox_ToPage = new JComboBox();
+		comboBox_ToPage.setModel(new DefaultComboBoxModel(new String[] {"auto", "5", "10", "15", "20", "30", "40", "50", "100", "all"}));
+		comboBox_ToPage.setEditable(true);
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -732,11 +732,11 @@ public class FAA3_GUI extends JFrame {
 							.addGroup(gl_panel_3.createSequentialGroup()
 								.addComponent(lblFromPageNumber, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE)
 								.addGap(4)
-								.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+								.addComponent(comboBox_FromPage, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
 								.addGap(24)
 								.addComponent(lblToPageNumber, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
 								.addGap(4)
-								.addComponent(comboBox_3, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))))
+								.addComponent(comboBox_ToPage, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))))
 					.addGap(8))
 		);
 		gl_panel_3.setVerticalGroup(
@@ -751,9 +751,9 @@ public class FAA3_GUI extends JFrame {
 						.addComponent(lblFromPageNumber, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_panel_3.createSequentialGroup()
 							.addGap(3)
-							.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(comboBox_FromPage, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addComponent(lblToPageNumber, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboBox_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(comboBox_ToPage, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
@@ -1723,15 +1723,15 @@ public class FAA3_GUI extends JFrame {
 			public void stateChanged(ChangeEvent e) {
 				if (chckbxAlsoParseThe.isSelected()) {
 					txtCfaamainphrases.setEnabled(true);
-					comboBox_2.setEnabled(true);
+					comboBox_FromPage.setEnabled(true);
 					comboBox.setEnabled(true);
-					comboBox_3.setEnabled(true);
+					comboBox_ToPage.setEnabled(true);
 					comboBox_1.setEnabled(true);
 				} else {
 					txtCfaamainphrases.setEnabled(false);
-					comboBox_2.setEnabled(false);
+					comboBox_FromPage.setEnabled(false);
 					comboBox.setEnabled(false);
-					comboBox_3.setEnabled(false);
+					comboBox_ToPage.setEnabled(false);
 					comboBox_1.setEnabled(false);
 				}
 			}
