@@ -1302,7 +1302,52 @@ public class FAA3_GUI extends JFrame {
 
 		JLayeredPane layeredPaneSearchTopic = new JLayeredPane();
 		tabbedPane.addTab("Search Related Topics", null, layeredPaneSearchTopic, null);
-		layeredPaneSearchTopic.setLayout(new BoxLayout(layeredPaneSearchTopic, BoxLayout.X_AXIS));
+		
+		JPanel panel_5 = new JPanel();
+		
+		JPanel panel_6 = new JPanel();
+		GroupLayout gl_layeredPaneSearchTopic = new GroupLayout(layeredPaneSearchTopic);
+		gl_layeredPaneSearchTopic.setHorizontalGroup(
+			gl_layeredPaneSearchTopic.createParallelGroup(Alignment.LEADING)
+				.addComponent(panel_6, GroupLayout.DEFAULT_SIZE, 1168, Short.MAX_VALUE)
+				.addComponent(panel_5, GroupLayout.DEFAULT_SIZE, 1168, Short.MAX_VALUE)
+		);
+		gl_layeredPaneSearchTopic.setVerticalGroup(
+			gl_layeredPaneSearchTopic.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_layeredPaneSearchTopic.createSequentialGroup()
+					.addComponent(panel_5, GroupLayout.PREFERRED_SIZE, 427, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel_6, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+					.addGap(0, 0, Short.MAX_VALUE))
+		);
+		
+		JPanel panel_7 = new JPanel();
+		
+		JPanel panel_8 = new JPanel();
+		
+		JPanel panel_9 = new JPanel();
+		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
+		gl_panel_5.setHorizontalGroup(
+			gl_panel_5.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_5.createSequentialGroup()
+					.addComponent(panel_7, GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel_8, GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel_9, GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		gl_panel_5.setVerticalGroup(
+			gl_panel_5.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_5.createSequentialGroup()
+					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_7, GroupLayout.PREFERRED_SIZE, 426, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_9, GroupLayout.PREFERRED_SIZE, 426, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_8, GroupLayout.PREFERRED_SIZE, 426, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		panel_5.setLayout(gl_panel_5);
+		layeredPaneSearchTopic.setLayout(gl_layeredPaneSearchTopic);
 		
 		JLayeredPane layeredPane_2 = new JLayeredPane();
 		tabbedPane.addTab("Computational linguistics and natural language processing", null, layeredPane_2, null);
