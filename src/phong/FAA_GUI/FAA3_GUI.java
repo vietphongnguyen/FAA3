@@ -118,6 +118,8 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.border.BevelBorder;
+import javax.swing.BoxLayout;
+import java.awt.BorderLayout;
 
 public class FAA3_GUI extends JFrame {
 
@@ -796,8 +798,7 @@ public class FAA3_GUI extends JFrame {
 		layeredPane.setLayout(gl_layeredPane);
 
 		layeredPane_1 = new JLayeredPane();
-
-		tabbedPane.addTab("Topics estimation", null, layeredPane_1, null);
+		tabbedPane.addTab("LDA Topics estimation", null, layeredPane_1, null);
 
 		JLabel lblNewLabel = new JLabel("Text data folder:");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -1299,6 +1300,10 @@ public class FAA3_GUI extends JFrame {
 				spinnerNumTopics, spinnerNumThreards, textAlphaSum, textBeta, spinnerNumOfIterations,
 				spinnerNumWordsInTopic, btnEstimateTopics, btnCancelMallet, btnGetCompositionTable, list_1 }));
 
+		JLayeredPane layeredPaneSearchTopic = new JLayeredPane();
+		tabbedPane.addTab("Search Related Topics", null, layeredPaneSearchTopic, null);
+		layeredPaneSearchTopic.setLayout(new BoxLayout(layeredPaneSearchTopic, BoxLayout.X_AXIS));
+		
 		JLayeredPane layeredPane_2 = new JLayeredPane();
 		tabbedPane.addTab("Computational linguistics and natural language processing", null, layeredPane_2, null);
 
