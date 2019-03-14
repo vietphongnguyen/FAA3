@@ -45,6 +45,11 @@ class createTextDataUsingTika extends SwingWorker {
 		if (new File(outputFolderName).mkdir()) {
 			//Out("Make folder '"+ folder +"' successfully \n");
 		}
+		String mainPhrasesOutputFolder = FAA3_GUI.txtCfaamainphrases.getText();
+		FileUtils.deleteDirectory(new File(mainPhrasesOutputFolder )); // Delete the old file in this directory
+		if (new File(mainPhrasesOutputFolder).mkdir()) { 
+			// Make new main Phrases Output Folder successful 
+		}
 		
 		File inputFolder = new File(inputFolderName);
 		File[] listOfFiles = inputFolder.listFiles();
@@ -144,7 +149,7 @@ class createTextDataUsingTika extends SwingWorker {
 				}
 				
 				if (FAA3_GUI.chckbxAlsoParseThe.isSelected()) {
-					ParseHeaderPhrases headerPhrases = new ParseHeaderPhrases(file,FAA3_GUI.txtCfaamainphrases.getText(),
+					ParseHeaderPhrases headerPhrases = new ParseHeaderPhrases(file,mainPhrasesOutputFolder,
 							FAA3_GUI.comboBox_FromPage.getSelectedItem().toString(),FAA3_GUI.comboBox_ToPage.getSelectedItem().toString() );
 				}
 				

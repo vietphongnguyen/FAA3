@@ -231,6 +231,8 @@ public class FAA3_GUI extends JFrame {
 	static JComboBox comboBox_ToPage;
 	private JComboBox comboBox;
 	private JComboBox comboBox_1;
+	static JComboBox comboBox_MaxLength;
+	static JCheckBox chckbxRemoveNormalSize;
 
 	public void InitWordnet(String wnhome) throws IOException {
 
@@ -710,34 +712,55 @@ public class FAA3_GUI extends JFrame {
 		comboBox_ToPage = new JComboBox();
 		comboBox_ToPage.setModel(new DefaultComboBoxModel(new String[] {"auto", "5", "10", "15", "20", "30", "40", "50", "100", "all"}));
 		comboBox_ToPage.setEditable(true);
+		
+		JLabel lblMaxCharacterOf = new JLabel("Max character of a phrase");
+		lblMaxCharacterOf.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		comboBox_MaxLength = new JComboBox();
+		comboBox_MaxLength.setEditable(true);
+		comboBox_MaxLength.setModel(new DefaultComboBoxModel(new String[] {"auto", "60", "80", "100", "120", "140", "any"}));
+		
+		chckbxRemoveNormalSize = new JCheckBox("Remove normal size text");
+		chckbxRemoveNormalSize.setSelected(true);
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_3.createSequentialGroup()
-					.addGap(12)
 					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_3.createSequentialGroup()
-							.addComponent(lblMaximumLevelOf, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(lblMaximumWordsFor, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panel_3.createSequentialGroup()
-								.addComponent(chckbxAlsoParseThe, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(txtCfaamainphrases, GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
-							.addGroup(gl_panel_3.createSequentialGroup()
-								.addComponent(lblFromPageNumber, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE)
-								.addGap(4)
-								.addComponent(comboBox_FromPage, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-								.addGap(24)
-								.addComponent(lblToPageNumber, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
-								.addGap(4)
-								.addComponent(comboBox_ToPage, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))))
-					.addGap(8))
+							.addGap(12)
+							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panel_3.createSequentialGroup()
+									.addComponent(chckbxAlsoParseThe, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txtCfaamainphrases, GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
+								.addGroup(gl_panel_3.createSequentialGroup()
+									.addComponent(lblMaximumLevelOf, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING, false)
+										.addGroup(gl_panel_3.createSequentialGroup()
+											.addComponent(comboBox_MaxLength, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+											.addGap(18)
+											.addComponent(chckbxRemoveNormalSize, GroupLayout.PREFERRED_SIZE, 234, GroupLayout.PREFERRED_SIZE))
+										.addGroup(gl_panel_3.createSequentialGroup()
+											.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+											.addGap(18)
+											.addComponent(lblMaximumWordsFor, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))))
+								.addGroup(gl_panel_3.createSequentialGroup()
+									.addComponent(lblFromPageNumber, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE)
+									.addGap(4)
+									.addComponent(comboBox_FromPage, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+									.addGap(24)
+									.addComponent(lblToPageNumber, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+									.addGap(4)
+									.addComponent(comboBox_ToPage, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)))
+							.addGap(33))
+						.addGroup(gl_panel_3.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblMaxCharacterOf, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap())
 		);
 		gl_panel_3.setVerticalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -761,7 +784,12 @@ public class FAA3_GUI extends JFrame {
 							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addComponent(lblMaximumWordsFor, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 						.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(59))
+					.addGap(9)
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblMaxCharacterOf)
+						.addComponent(comboBox_MaxLength, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(chckbxRemoveNormalSize))
+					.addGap(20))
 		);
 		panel_3.setLayout(gl_panel_3);
 		layeredPane.setLayout(gl_layeredPane);
@@ -1727,12 +1755,16 @@ public class FAA3_GUI extends JFrame {
 					comboBox.setEnabled(true);
 					comboBox_ToPage.setEnabled(true);
 					comboBox_1.setEnabled(true);
+					comboBox_MaxLength.setEnabled(true);
+					chckbxRemoveNormalSize.setEnabled(true);
 				} else {
 					txtCfaamainphrases.setEnabled(false);
 					comboBox_FromPage.setEnabled(false);
 					comboBox.setEnabled(false);
 					comboBox_ToPage.setEnabled(false);
 					comboBox_1.setEnabled(false);
+					comboBox_MaxLength.setEnabled(false);
+					chckbxRemoveNormalSize.setEnabled(false);
 				}
 			}
 		});

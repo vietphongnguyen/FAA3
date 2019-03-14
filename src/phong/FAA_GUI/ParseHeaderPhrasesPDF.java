@@ -34,6 +34,7 @@ public class ParseHeaderPhrasesPDF extends PDFTextStripper{
 
 	int levelOfExtraction = 10;
 	int maxNoCharacters = 100000;
+	int maxLength = 100;
 	TreeMap<Integer, String> textDataLevel = new TreeMap<>((Collections.reverseOrder()));
 	String text = "";
 	int normalSize = 0;
@@ -48,8 +49,10 @@ public class ParseHeaderPhrasesPDF extends PDFTextStripper{
 	@SuppressWarnings("resource")
 	public ParseHeaderPhrasesPDF(File file, String outputFolder, String fromPageS, String toPageS) throws IOException{
 		this();
+		try {
+			maxLength = Integer.parseInt(FAA3_GUI.comboBox_MaxLength.getSelectedItem().toString()	);
+		} catch (Exception e1) {}
 		
-
 		int fromPage=1, toPage=20;
 		try {
 			fromPage = Integer.parseInt(fromPageS);
@@ -79,10 +82,7 @@ public class ParseHeaderPhrasesPDF extends PDFTextStripper{
 			
 			sortedTextDataLevel();
 			
-			FileUtils.deleteDirectory(new File(outputFolder )); // Delete the old file in this directory
-			if (new File(outputFolder).mkdir()) { 
-				// Make new folder successful 
-			} 					
+			 					
 			
 			saveToFile(outputFolder + "\\" + file.getName() + ".txt");
 			
@@ -119,7 +119,7 @@ public class ParseHeaderPhrasesPDF extends PDFTextStripper{
     	String line="";
     	int maxSize = 0;
     	
-    	int fontSize;
+    	int fontSize=0;
     	String s;
     	Character ch;
     	for (TextPosition text : textPositions)
@@ -153,14 +153,17 @@ public class ParseHeaderPhrasesPDF extends PDFTextStripper{
     			continue;
     		}
     		fontSize = (int) ( text.getHeightDir()*10 + 0.5); // or use Math.round(d);
-    		if (fontSize > maxSize) 
+    		if (fontSize > maxSize) {
     			maxSize = fontSize;
-    		line += s;
+    			line = s;
+    		} else
+    			if (fontSize == maxSize) 
+    			line += s;
     		
         }
     	if (maxSize < normalSize) return;
     	line = line.trim();
-    	if (line.length() > 60 ) {	// too long will be consider normal text - Not the important title phrase
+    	if (line.length() > maxLength ) {	// too long will be consider normal text - Not the important title phrase
     		if (normalSize < maxSize) normalSize = maxSize;
     		return;
     	}
@@ -193,6 +196,35 @@ public class ParseHeaderPhrasesPDF extends PDFTextStripper{
                 i.remove();
             }
         }
+		
+		boolean removeNormalSize = true;
+		try {
+			removeNormalSize = FAA3_GUI.chckbxRemoveNormalSize.isSelected();
+		} catch (Exception e1) {}
+		if (removeNormalSize) {
+			int max = 0;
+			for (Entry<Integer,String> e : textDataLevel.entrySet()) 
+				if (e.getValue().length() > max) 
+					max = e.getValue().length();
+			
+			// Remove the entry from the normal size of text in textDataLevel Tree Map
+			Iterator<Entry<Integer, String>> i2 = textDataLevel.entrySet().iterator();
+			Map.Entry<Integer, String> e2;
+			boolean delete = false;
+			while(i2.hasNext()) {
+				e2 = i2.next();
+				if (delete) {
+					i2.remove();
+					continue;
+				}
+				
+				if (e2.getValue().length() >= max) {
+					delete = true;
+					i2.remove();
+				}
+	        }
+			
+		}
 		
 		for (Entry<Integer, String> entry : textDataLevel.entrySet()) {
 			s = entry.getValue().trim();

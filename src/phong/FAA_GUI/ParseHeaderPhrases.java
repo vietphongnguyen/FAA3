@@ -4,6 +4,7 @@
 package phong.FAA_GUI;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Phong Nguyen (vietphong.nguyen@gmail.com)
@@ -20,8 +21,13 @@ public class ParseHeaderPhrases {
 
 	public ParseHeaderPhrases(File file, String outputFolder, String fromPageS, String toPageS) {
 		String fileName = file.getName().toLowerCase();
-		if (fileName.endsWith("pdf")) {
-			ParseHeaderPhrasesPDF mainPhrases = new ParseHeaderPhrasesPDF(file,outputFolder, fromPageS, toPageS);
+		if (fileName.endsWith(".pdf")) {
+			try {
+				ParseHeaderPhrasesPDF mainPhrases = new ParseHeaderPhrasesPDF(file,outputFolder, fromPageS, toPageS);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
