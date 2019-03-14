@@ -233,6 +233,7 @@ public class FAA3_GUI extends JFrame {
 	private JComboBox comboBox_1;
 	static JComboBox comboBox_MaxLength;
 	static JCheckBox chckbxRemoveNormalSize;
+	private JButton btnNewButton;
 
 	public void InitWordnet(String wnhome) throws IOException {
 
@@ -1152,13 +1153,13 @@ public class FAA3_GUI extends JFrame {
 									.addComponent(spinnerNumWordsInTopic, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
 						.addGroup(gl_layeredPane_1.createSequentialGroup()
 							.addGap(7)
-							.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING, false)
+							.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_layeredPane_1.createSequentialGroup()
 									.addComponent(panel, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+									.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE))
 								.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 170, GroupLayout.PREFERRED_SIZE))))
-					.addGap(18)
+					.addGap(9)
 					.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
 						.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
 						.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE))
@@ -1237,7 +1238,7 @@ public class FAA3_GUI extends JFrame {
 		txSearchTopic.setColumns(32);
 		panel_1.add(txSearchTopic);
 		
-		btnEstimateTopicsSimilar = new JButton("Estimate topics similar with this text");
+		btnEstimateTopicsSimilar = new JButton("Estimate topics using LDA");
 		
 		btnEstimateTopicsSimilar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnEstimateTopicsSimilar.setBounds(6, 66, 250, 23);
@@ -1248,6 +1249,12 @@ public class FAA3_GUI extends JFrame {
 		
 		btnGetScore.setBounds(255, 66, 93, 23);
 		panel_1.add(btnGetScore);
+		
+		btnNewButton = new JButton("Find related topics using title phrases");
+		
+		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnNewButton.setBounds(6, 91, 250, 23);
+		panel_1.add(btnNewButton);
 		panel.setLayout(null);
 		
 		JLabel label = new JLabel("N-gram");
@@ -1747,6 +1754,13 @@ public class FAA3_GUI extends JFrame {
 	
 	private void createEvents() {
 
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FindTopicsByTitlePhrases topicsByTitlePhrases = new FindTopicsByTitlePhrases(txSearchTopic.getText(),FAA3_GUI.txtCfaamainphrases.getText());
+				
+			}
+		});
+		
 		chckbxAlsoParseThe.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (chckbxAlsoParseThe.isSelected()) {
@@ -2823,22 +2837,8 @@ public class FAA3_GUI extends JFrame {
 	}
 
 	protected String getFoulderNameOf(String text) {
-		String s = text;
-
-		// delete newline and space at the beginning of S
-		while ((s.length() > 0) && ((s.charAt(0) == '\n') || (s.charAt(0) == ' ')))
-			s = s.substring(1);
-
-		int vtnewline = s.indexOf('\n');
-		if (vtnewline < 0)
-			vtnewline = s.length();
-		String fouldername = s.substring(0, vtnewline);
-
-		// delete newline and space at the ending of fouldername
-		while ((fouldername.length() > 0) && ((fouldername.endsWith("\n") || (fouldername.endsWith(" ")))))
-			fouldername = fouldername.substring(0, fouldername.length() - 1);
-
-		return fouldername;
+		String s = text.trim().split("\n")[0];
+		return s.trim();
 	}
 
 	public FAA3_GUI() throws IOException {

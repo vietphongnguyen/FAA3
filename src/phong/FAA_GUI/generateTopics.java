@@ -378,7 +378,9 @@ public class generateTopics extends SwingWorker {
 		System.out.println("");
 		resultForConsole += "\n\n";
 		FAA3_GUI.NumberOfTopic = numTopics; 
-		FAA3_GUI.listTopics.repaint();
+		//FAA3_GUI.listTopics.repaint();
+		//FAA3_GUI.listTopics.ensureIndexIsVisible(FAA3_GUI.JListOfTopics.getSize()-1);
+		FAA3_GUI.listTopics.ensureIndexIsVisible(0);
 
 	}
 

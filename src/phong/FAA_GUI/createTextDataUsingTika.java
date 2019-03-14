@@ -38,18 +38,12 @@ class createTextDataUsingTika extends SwingWorker {
 		String outputFolderName = OutputFolderName;
 		Outln("Extracting text data from '" + inputFolderName + "' to '" + outputFolderName + "'");
 		
-		FileUtils.deleteDirectory(new File(outputFolderName )); // Delete the old file in this directory
-		Out("Delete all of the old files in directory'"+ outputFolderName +"' successfully \n");
+		DeleteOldFilesInDirectory(outputFolderName);
 		FAA3_GUI.JListOfFiles.clear();
 		
-		if (new File(outputFolderName).mkdir()) {
-			//Out("Make folder '"+ folder +"' successfully \n");
-		}
+		
 		String mainPhrasesOutputFolder = FAA3_GUI.txtCfaamainphrases.getText();
-		FileUtils.deleteDirectory(new File(mainPhrasesOutputFolder )); // Delete the old file in this directory
-		if (new File(mainPhrasesOutputFolder).mkdir()) { 
-			// Make new main Phrases Output Folder successful 
-		}
+		DeleteOldFilesInDirectory(mainPhrasesOutputFolder);
 		
 		File inputFolder = new File(inputFolderName);
 		File[] listOfFiles = inputFolder.listFiles();
@@ -107,7 +101,6 @@ class createTextDataUsingTika extends SwingWorker {
 					}
 				}
 
-				System.out.println("\n" + fileName);
 				Out("\nExtracting '" + fileName + "'\n");
 
 				// System.out.println("Parsing using the Auto-Detect Parser:");
@@ -118,7 +111,6 @@ class createTextDataUsingTika extends SwingWorker {
 				FileInputStream stream = new FileInputStream(new File(inputFolderName +"/" + fileName));
 				if (FAA3_GUI.process_createTextDataUsingTika.isCancelled()) { Out("The process of creating text data had been canceled by user  \n"); FAA3_GUI.btnExtractTextContents.setEnabled(true);FAA3_GUI.btnGetFiles.setEnabled(true); return -1; }
 				try {
-////////////////////////////////////  Error: Prohibited package name: java.sql	/////////////////////////////////////////////////////////////////////////
 					parser.parse(stream, handler, metadata, parseContext);
 
 				} catch (Exception e) {
@@ -170,7 +162,6 @@ class createTextDataUsingTika extends SwingWorker {
 					}
 				}
 				else {
-					// System.out.println(s);
 					Writer writer = null;
 					try {
 						writer = new BufferedWriter(new OutputStreamWriter(
@@ -194,8 +185,7 @@ class createTextDataUsingTika extends SwingWorker {
 					} finally {
 						try {
 							writer.close();
-						} catch (Exception ex) {
-							/* ignore */}
+						} catch (Exception ex) {}
 					}
 					
 				}
@@ -211,6 +201,20 @@ class createTextDataUsingTika extends SwingWorker {
 		
 		return 0 ;
     }
+	
+	private void DeleteOldFilesInDirectory(String outputFolderName) {
+		// Delete the old file in this directory
+		try {
+			FileUtils.deleteDirectory(new File(outputFolderName ));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+		if (new File(outputFolderName).mkdir()) {
+			//Out("Make folder '"+ folder +"' successfully \n");
+		}
+		//Out("Delete all of the old files in directory'"+ outputFolderName +"' successfully \n");
+	}
+
 	private static String Check_Folder_Name(String folderName) {
 		String s = folderName.replaceAll("^\\s+|\\s+$", ""); // remove all the space at the beginning and at the end of
 																// string S

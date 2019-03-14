@@ -14,10 +14,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -38,6 +40,7 @@ public class ParseHeaderPhrasesPDF extends PDFTextStripper{
 	TreeMap<Integer, String> textDataLevel = new TreeMap<>((Collections.reverseOrder()));
 	String text = "";
 	int normalSize = 0;
+	int previousFontSize=0;
 	
 	/**
 	 * 
@@ -82,14 +85,33 @@ public class ParseHeaderPhrasesPDF extends PDFTextStripper{
 			
 			sortedTextDataLevel();
 			
-			 					
-			
+			cleanUpText();
+								
 			saveToFile(outputFolder + "\\" + file.getName() + ".txt");
 			
 		} finally {
 			if (document != null) {
 				document.close();
 			}
+		}
+	}
+
+	private void cleanUpText() {
+		// to lower case
+		text = text.toLowerCase();
+		
+		//removeShortPhase(); // remove 1 word phrases
+		String[] phrases = text.split("\n");
+		Set<String> phrasesSet = new LinkedHashSet<String>();
+		for (String ph:phrases) {
+			ph = ph.trim();
+			if (ph.indexOf(" ") > 0)  // have space mean have more than 1 word
+				phrasesSet.add(ph);
+		}
+		
+		text = "";
+		for (String s: phrasesSet) {
+			text += s + System.lineSeparator();
 		}
 	}
 
@@ -116,68 +138,72 @@ public class ParseHeaderPhrasesPDF extends PDFTextStripper{
     @Override
     protected void writeString(String string, List<TextPosition> textPositions) throws IOException
     {
+    	
     	String line="";
     	int maxSize = 0;
     	
     	int fontSize=0;
     	String s;
     	Character ch;
+    	boolean alreadyCheckNewLine = false;
+    	boolean NoNewLine = false;
+    	int changeFontCount = 0;
     	for (TextPosition text : textPositions)
         {
-            /*System.out.println( "P String[" + text.getXDirAdj() + "," +
-                    text.getYDirAdj() + " fs=" + text.getFontSize() + " xscale=" +
-                    text.getXScale() + " height=" + text.getHeightDir() + " space=" +
-                    text.getWidthOfSpace() + " width=" +
-                    text.getWidthDirAdj() + "]" + text.getUnicode() );*/
+            /*System.out.println( "P String[" + text.getXDirAdj() + "," + text.getYDirAdj() + " fs=" + text.getFontSize() + " xscale=" +
+             text.getXScale() + " height=" + text.getHeightDir() + " space=" + text.getWidthOfSpace() + " width=" + text.getWidthDirAdj() + "]" + text.getUnicode() );*/
     		
     		s = text.getUnicode();
     		ch = s.charAt(0);
     		
+    		fontSize = (int) ( text.getHeightDir()*10 + 0.5); // or use Math.round(d);
+    		if ((!alreadyCheckNewLine))
+    			if ( (previousFontSize == fontSize)	) 
+    				NoNewLine = true;	// No need a new line and continue the previous line with this one
+    		
+    		alreadyCheckNewLine = true;	// mark to inform that it passed the first character check already. No need to check again from the 2nd character    		
+    		
     		String considerPoint = ".!?;";
     		if (considerPoint.indexOf(ch)>=0) {
-    			line += ". ";
+    			line += System.lineSeparator();
     			continue;
     		}
-    		String considerComma = ",+=/'\":";
+    		String considerComma = ",+=/'\":()<>[]{}";
     		if (considerComma.indexOf(ch)>=0) {
-    			line += ", ";
+    			line += System.lineSeparator();
     			continue;
     		}
-    		String helpExplanation = "()<>[] {}";
-    		if (helpExplanation.indexOf(ch)>=0) {
-    			line += ch;
-    			continue;
-    		}
-    		if (	!(	Character.isLetterOrDigit(ch) || Character.isWhitespace(ch) || (ch == '.')|| (ch == ',')	 		)	) {
+
+    		if (	!(	Character.isLetterOrDigit(ch) || Character.isWhitespace(ch) 		)	) {
     			line += " "; // replace by a space for any other special characters
     			continue;
     		}
-    		fontSize = (int) ( text.getHeightDir()*10 + 0.5); // or use Math.round(d);
     		if (fontSize > maxSize) {
     			maxSize = fontSize;
     			line = s;
+    			changeFontCount++;
     		} else
     			if (fontSize == maxSize) 
     			line += s;
-    		
+    		previousFontSize = fontSize;
         }
-    	if (maxSize < normalSize) return;
+    	//if (maxSize < normalSize) return;
     	line = line.trim();
     	if (line.length() > maxLength ) {	// too long will be consider normal text - Not the important title phrase
     		if (normalSize < maxSize) normalSize = maxSize;
     		return;
     	}
-    	if (textDataLevel.containsKey(maxSize))
-			textDataLevel.put(maxSize, textDataLevel.get(maxSize) + line );
+    	if (line.equals("") ) line += System.lineSeparator();	// start a new phrase
+    	if (textDataLevel.containsKey(maxSize)) {
+    		if (NoNewLine && (changeFontCount <= 1))
+    			textDataLevel.put(maxSize, textDataLevel.get(maxSize) + " " + line );
+    		else
+    			textDataLevel.put(maxSize, textDataLevel.get(maxSize) + " " + System.lineSeparator() + line );
+    	}
 		else
 			textDataLevel.put(maxSize, line );
     	
-    	// Put a space at the end of each line to separate with text in the next line 
-    	for (Entry<Integer, String> entry : textDataLevel.entrySet()) {
-    		int key = entry.getKey();
-    		String value = entry.getValue().trim() + " \n";
-    		textDataLevel.put(key, value);
-    	}
+    	
     }
     
     private void sortedTextDataLevel() {
@@ -230,7 +256,7 @@ public class ParseHeaderPhrasesPDF extends PDFTextStripper{
 			s = entry.getValue().trim();
 			
 			//System.out.println("Key = " + entry.getKey() + ", Value = " + s);
-			text += s + ".\n\n";
+			text += s + "\n\n";
 			level++;
 			if (level >= levelOfExtraction)
 				break;
@@ -242,7 +268,7 @@ public class ParseHeaderPhrasesPDF extends PDFTextStripper{
 	 */
 	public static void main(String[] args) {
 		try {
-			ParseHeaderPhrasesPDF pdf = new ParseHeaderPhrasesPDF(new File("C:\\FAA3\\data\\ILP01-En Route Qualification Training Overview.pdf") , "C:\\FAA3\\main_phrases", "1", "auto");
+			ParseHeaderPhrasesPDF pdf = new ParseHeaderPhrasesPDF(new File("C:\\FAA3\\data\\ILP42-Team Responsibilities.pdf") , "C:\\FAA3\\main_phrases", "1", "auto");
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
