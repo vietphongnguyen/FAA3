@@ -290,19 +290,8 @@ public class generateTopics extends SwingWorker {
 			row.add(StringWidthAlign(instances.size(), Integer.toString(instanceID)));
 
 			s = Get_File_Name(I.getName().toString().replaceAll("%20", " "));
-			//System.out.printf(" %80.75s ",
-					// "\t" +I.getData().toString() + // Content of the file
-					// "\t" +I.getTarget().toString() + // Folder name
-					// Get_File_Name(I.getName().toString().replaceAll("%20", " ") ) // Full file
-					// name and directory path
-			//		s
-			// + "\t"
-			// + "\t" + I.getSource()==null ? "null" :I.getSource().toString()
-			//);
 			resultForConsole += s + "  ";
 			row.add(s);
-
-			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			double[] Probabilities = model.getTopicProbabilities(instanceID);
 			for (int topicID = 0; topicID < numTopics; topicID++) {
 				s = String.format("%.3f", Probabilities[topicID]);

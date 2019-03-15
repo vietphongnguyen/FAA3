@@ -50,8 +50,9 @@ public class LDATopicsSearch {
 			return;
 		}
 		FAA3_GUI.btnEstimateTopics_1.setEnabled(false);
-		FAA3_GUI.actionPerformed_EstimateTopics();
 		FAA3_GUI.textField_LDARelatedTopics.setText(topics);
+		FAA3_GUI.actionPerformed_EstimateTopics();
+		
 	}
 
 	protected static void removeTopicSearchFile(String folder, String fileName) {
@@ -69,7 +70,6 @@ public class LDATopicsSearch {
 		}
 	}
 	public static void getTopicDocsScore(String fileName, InstanceList instances,String searchText) {
-		// TODO Auto-generated method stub
 		// fileName, instances
 		String s;
 		
@@ -132,7 +132,7 @@ public class LDATopicsSearch {
 		printListOfWordsInTopic(topic_Search, FAA3_GUI.textArea_LDATopicWords);
 		
 		//printSuggestedDocumentsForATopic(FAA3_GUI.listModel_LDATopicsSearch, new DecimalFormat("#,##0.0000"), fileNames, probs);
-		
+		searchText = FAA3_GUI.textField_LDARelatedTopics.getText();
 		suggestedDocumentsForATopic = new SuggestedDocumentsForATopic(searchText,fileNames, probs, topic_Search);
 		suggestedDocumentsForATopic.setVisible(true);
 		
