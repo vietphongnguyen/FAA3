@@ -48,15 +48,17 @@ public class FindTopicsByTitlePhrases extends JFrame{
 	private JButton btnFindTopics;
 	private JComboBox comboBox_topic;
 	private JList list;
-
-	String topics;
+	private JScrollPane scrollPane;
+	
 	DefaultListModel listPhrases;
+	
+	String topics;
 	Set<String> phrasesSet = new LinkedHashSet<String>();
 	TreeMap<Integer, String> phrasesLevel = new TreeMap<>((Collections.reverseOrder()));
 	String[] modelContent;
 	String inputFolderS;
 	String stopwordTopicSearch="\n";
-	private JScrollPane scrollPane;
+	
 	
 	/**
 	 * 

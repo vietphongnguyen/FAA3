@@ -236,6 +236,15 @@ public class FAA3_GUI extends JFrame {
 	static JComboBox comboBox_MaxLength;
 	static JCheckBox chckbxRemoveNormalSize;
 	private JButton btnNewButton;
+	static JList list_3;
+	private JButton button_4;
+	static JComboBox comboBox_TopicSearch;
+	static DefaultListModel listPhrases;
+	public static String[] modelContent;
+	FindTopicsByTitlePhrases2 findTopicsByTitlePhrases2;
+	static JTextField textField_RelatedPhrases;
+	private JTextField textField_1;
+	private JTextField txtWeatherConditionhtml;
 
 	public void InitWordnet(String wnhome) throws IOException {
 
@@ -1322,30 +1331,240 @@ public class FAA3_GUI extends JFrame {
 		);
 		
 		JPanel panel_7 = new JPanel();
+		panel_7.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
 		JPanel panel_8 = new JPanel();
+		panel_8.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
 		JPanel panel_9 = new JPanel();
+		panel_9.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		
+		JPanel panel_10 = new JPanel();
 		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
 		gl_panel_5.setHorizontalGroup(
 			gl_panel_5.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_5.createSequentialGroup()
-					.addComponent(panel_7, GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
+					.addComponent(panel_7, GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_8, GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+					.addComponent(panel_8, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_9, GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
+					.addComponent(panel_9, GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
 					.addContainerGap())
+				.addComponent(panel_10, GroupLayout.DEFAULT_SIZE, 1168, Short.MAX_VALUE)
 		);
 		gl_panel_5.setVerticalGroup(
 			gl_panel_5.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_5.createSequentialGroup()
+					.addComponent(panel_10, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel_7, GroupLayout.PREFERRED_SIZE, 426, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_9, GroupLayout.PREFERRED_SIZE, 426, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_8, GroupLayout.PREFERRED_SIZE, 426, GroupLayout.PREFERRED_SIZE))
+						.addComponent(panel_9, GroupLayout.PREFERRED_SIZE, 392, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_8, GroupLayout.PREFERRED_SIZE, 392, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_7, GroupLayout.PREFERRED_SIZE, 392, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
+		
+		JLabel lblSolrKnowledgeArchitecture = new JLabel("Solr Knowledge Architecture");
+		lblSolrKnowledgeArchitecture.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		JButton btnGetRelatedTopics = new JButton("Get Related Topics on Solr");
+		
+		JLabel label_7 = new JLabel("Solr HTML output");
+		label_7.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		txtWeatherConditionhtml = new JTextField();
+		txtWeatherConditionhtml.setText("weather condition.html");
+		txtWeatherConditionhtml.setColumns(10);
+		
+		JLabel label_8 = new JLabel("Solr server");
+		label_8.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		JComboBox comboBox_2 = new JComboBox();
+		comboBox_2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		comboBox_2.setModel(new DefaultComboBoxModel(new String[] {"http://localhost:8983/solr/knowledgeArchitecture.html", "http://130.101.10.139:8983/solr/knowledgeArchitecture.html", "http://"}));
+		comboBox_2.setEditable(true);
+		JList list_4 = new JList();
+		JScrollPane scrollPane_10 = new JScrollPane(list_4);
+		GroupLayout gl_panel_9 = new GroupLayout(panel_9);
+		gl_panel_9.setHorizontalGroup(
+			gl_panel_9.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_9.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_9.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_9.createSequentialGroup()
+							.addComponent(lblSolrKnowledgeArchitecture, GroupLayout.PREFERRED_SIZE, 165, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnGetRelatedTopics, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE))
+						.addGroup(gl_panel_9.createSequentialGroup()
+							.addComponent(label_7, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(txtWeatherConditionhtml, GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
+						.addGroup(gl_panel_9.createSequentialGroup()
+							.addComponent(label_8, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(comboBox_2, 0, 297, Short.MAX_VALUE))))
+				.addComponent(scrollPane_10, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+		);
+		gl_panel_9.setVerticalGroup(
+			gl_panel_9.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_9.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_9.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblSolrKnowledgeArchitecture)
+						.addComponent(btnGetRelatedTopics))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_9.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_7)
+						.addComponent(txtWeatherConditionhtml, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_9.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_8)
+						.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(scrollPane_10, GroupLayout.PREFERRED_SIZE, 251, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(45, Short.MAX_VALUE))
+		);
+		
+		
+		panel_9.setLayout(gl_panel_9);
+		
+		JLabel lblEstimateTopicsUsing = new JLabel("Estimate topics using LDA");
+		lblEstimateTopicsUsing.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		JButton btnEstimateTopics_1 = new JButton("Estimate topics");
+		
+		JLabel label_4 = new JLabel("Related to:");
+		
+		textField_1 = new JTextField();
+		textField_1.setEditable(false);
+		textField_1.setColumns(10);
+		
+		JLabel label_5 = new JLabel("List of words:");
+		label_5.setHorizontalAlignment(SwingConstants.LEFT);
+		JTextArea textArea = new JTextArea();
+		
+		JScrollPane scrollPane_9 = new JScrollPane(textArea);
+		GroupLayout gl_panel_8 = new GroupLayout(panel_8);
+		gl_panel_8.setHorizontalGroup(
+			gl_panel_8.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_8.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_8.createParallelGroup(Alignment.LEADING)
+						.addComponent(scrollPane_9, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+						.addGroup(gl_panel_8.createSequentialGroup()
+							.addComponent(lblEstimateTopicsUsing, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnEstimateTopics_1, GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE))
+						.addGroup(gl_panel_8.createSequentialGroup()
+							.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE))
+						.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
+		gl_panel_8.setVerticalGroup(
+			gl_panel_8.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_8.createSequentialGroup()
+					.addGroup(gl_panel_8.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblEstimateTopicsUsing)
+						.addComponent(btnEstimateTopics_1))
+					.addGroup(gl_panel_8.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_8.createSequentialGroup()
+							.addGap(7)
+							.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_8.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(label_5)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(scrollPane_9, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(167, Short.MAX_VALUE))
+		);
+		
+		
+		panel_8.setLayout(gl_panel_8);
+		
+		JLabel label_3 = new JLabel("Find Topics By Title Phrases");
+		label_3.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		button_4 = new JButton("Find Topics");
+		
+		
+		listPhrases =  new DefaultListModel();
+		list_3 = new JList(listPhrases);
+		
+		
+		JScrollPane scrollPane_5 = new JScrollPane(list_3);
+		
+		JLabel lblRelatedTo = new JLabel("Related to:");
+		
+		textField_RelatedPhrases = new JTextField();
+		textField_RelatedPhrases.setEditable(false);
+		textField_RelatedPhrases.setColumns(10);
+		
+		GroupLayout gl_panel_7 = new GroupLayout(panel_7);
+		gl_panel_7.setHorizontalGroup(
+			gl_panel_7.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_panel_7.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(label_3, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(button_4, GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+					.addContainerGap())
+				.addGroup(Alignment.LEADING, gl_panel_7.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblRelatedTo, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(textField_RelatedPhrases, GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+					.addContainerGap())
+				.addComponent(scrollPane_5, GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+		);
+		gl_panel_7.setVerticalGroup(
+			gl_panel_7.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_7.createSequentialGroup()
+					.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_3)
+						.addComponent(button_4))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblRelatedTo, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textField_RelatedPhrases, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 297, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(36, Short.MAX_VALUE))
+		);
+		
+		
+		panel_7.setLayout(gl_panel_7);
+		
+		JLabel label_2 = new JLabel("Topic Search");
+		label_2.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		comboBox_TopicSearch = new JComboBox();
+		modelContent = new String[] {"weather condition", "Evaluate weather condition", "Nonradar terminal control", "Perform handoff", "Maintain separation", "VFR"};
+		
+		comboBox_TopicSearch.setModel(new DefaultComboBoxModel(modelContent));
+		comboBox_TopicSearch.setEditable(true);
+		GroupLayout gl_panel_10 = new GroupLayout(panel_10);
+		gl_panel_10.setHorizontalGroup(
+			gl_panel_10.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_10.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(comboBox_TopicSearch, 0, 1050, Short.MAX_VALUE))
+		);
+		gl_panel_10.setVerticalGroup(
+			gl_panel_10.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_10.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_10.createParallelGroup(Alignment.BASELINE)
+						.addComponent(comboBox_TopicSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(label_2))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		panel_10.setLayout(gl_panel_10);
 		panel_5.setLayout(gl_panel_5);
 		layeredPaneSearchTopic.setLayout(gl_layeredPaneSearchTopic);
 		
@@ -1628,7 +1847,7 @@ public class FAA3_GUI extends JFrame {
 		autoTopic = new autoDetectNumTopics(NumberFileInTextFolder() );
 
 		updateAutoDetectTopicsForm() ;
-		tabbedPane.setSelectedIndex(1);
+		tabbedPane.setSelectedIndex(2);
 	}
 
 
@@ -1804,6 +2023,21 @@ public class FAA3_GUI extends JFrame {
 	
 	private void createEvents() {
 
+		list_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				findTopicsByTitlePhrases2.actionPerformed_mouseClicked();
+			}
+			
+		});
+		
+		button_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				findTopicsByTitlePhrases2.actionPerformed_FindTopicsButtonClicked();
+			}
+		});
+		
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FindTopicsByTitlePhrases topicsByTitlePhrases = new FindTopicsByTitlePhrases(txSearchTopic.getText(),FAA3_GUI.txtCfaamainphrases.getText());
@@ -2894,6 +3128,7 @@ public class FAA3_GUI extends JFrame {
 	public FAA3_GUI() throws IOException {
 		initComponents();
 		createEvents();
+		findTopicsByTitlePhrases2 = new FindTopicsByTitlePhrases2();
 		InitWordnet(".");
 	}
 

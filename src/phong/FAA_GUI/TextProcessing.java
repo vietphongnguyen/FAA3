@@ -61,7 +61,7 @@ public class TextProcessing {
 		return output;
 	}
 
-	private static String removeDuplicateSpace(String s) {
+	public static String removeDuplicateSpace(String s) {
 		s = s.replaceAll("\\s{2,}", " ");
 		return s;
 	}
@@ -75,7 +75,7 @@ public class TextProcessing {
 		return s;
 	}
 
-	private static String removeDuplicatePunctuation(String s) {
+	public static String removeDuplicatePunctuation(String s) {
 		String output="";
 		Character ch;
 		int wordLength = 0;
