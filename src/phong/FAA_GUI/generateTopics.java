@@ -221,6 +221,12 @@ public class generateTopics extends SwingWorker {
 		printCompositionTableFromInstances();
 
 		// Completed
+		afterSuccessfulCompletedEstimation();
+		
+		return null;
+	}
+
+	private void afterSuccessfulCompletedEstimation() {
 		FAA3_GUI.progressBarMallet
 				.setString("Done " + (count) + " / " + numIterations + " ( Estimating topics finished )");
 		FAA3_GUI.btnCancelMallet.setEnabled(false);
@@ -231,7 +237,13 @@ public class generateTopics extends SwingWorker {
 		FAA3_GUI.process_GenerateTopics_running = false;
 		FAA3_GUI.Outln(resultForConsole);
 		FAA3_GUI.btnSearchTopics.setEnabled(true);
-		return null;
+
+		if (!FAA3_GUI.btnEstimateTopics_1.isEnabled()) {  // Run after the LDATopicSeach
+			FAA3_GUI.btnEstimateTopics_1.setEnabled(true);
+			FAA3_GUI.btnShowResults.setEnabled(true);
+			LDATopicsSearch.removeTopicSearchFile(FAA3_GUI.txtTextdatafolder.getText(),"P_N_Topic_Search.txt");
+			LDATopicsSearch.getTopicDocsScore("P_N_Topic_Search.txt", generateTopics.instances,FAA3_GUI.txSearchTopic.getText());
+		}
 	}
 
 	public static void printCompositionTableFromInstances() throws InterruptedException {

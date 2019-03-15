@@ -50,11 +50,11 @@ public class SuggestedDocumentsForATopic extends JFrame{
 	private JPanel contentPane;
 	private JTextField textField;
 	private JList listDocs;
-	public DefaultListModel listModel = new DefaultListModel();
-	private JTextField textField_MinProb;
+	public static DefaultListModel<String> listModel = new DefaultListModel<String>();
+	public static JTextField textField_MinProb;
 	private JSpinner spinnerDigit;
 	String format;
-	DecimalFormat decimalFormat;
+	static DecimalFormat decimalFormat;
 	private JLabel lblListOfWords;
 	private JScrollPane scrollPane_1;
 	static JTextArea textArea_words;
@@ -88,42 +88,13 @@ public class SuggestedDocumentsForATopic extends JFrame{
 	public SuggestedDocumentsForATopic(String searchText, String[] fileNames, double[] probs, int topic) {
 		this();
 		textField.setText(searchText);
-		double minProb;
-		try {
-			minProb = Double.parseDouble(textField_MinProb.getText());
-		} catch (NumberFormatException e1) {
-			minProb = 0.005;
-			e1.printStackTrace();
-		}
-		for (int i = 0; i< probs.length; i++) {
-			try {
-				if (probs[i]>= minProb)
-					listModel.add(i, decimalFormat.format(probs[i]) + " : " + fileNames[i]);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-		
-		printListOfWordsInTopic(topic);
+
+		LDATopicsSearch.printSuggestedDocumentsForATopic(listModel, decimalFormat, fileNames, probs);
+		LDATopicsSearch.printListOfWordsInTopic(topic,textArea_words);
 		
 	}
 
-
-	private void printListOfWordsInTopic(int topic) {
-		String output="";
-		Iterator<IDSorter> iterator = generateTopics.topicSortedWords.get(topic).iterator();
-		while (iterator.hasNext() ) {
-			IDSorter idCountPair = iterator.next();
-			output += generateTopics.dataAlphabet.lookupObject(idCountPair.getID()) + " (" + idCountPair.getWeight() + "), ";
-			
-		}
-		
-		textArea_words.setText(output);
-	}
-
-
-
+	
 	private void createEvents() {
 		
 		btnNewButton.addActionListener(new ActionListener() {
@@ -166,8 +137,6 @@ public class SuggestedDocumentsForATopic extends JFrame{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE );
 		setBounds(0, 200, 800, 600);
 		
 		try {
@@ -244,13 +213,12 @@ public class SuggestedDocumentsForATopic extends JFrame{
 					.addGap(25)
 					.addComponent(lblMinimumProbabilityScore, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
 					.addGap(10)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(textField_MinProb, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(87)
-							.addComponent(lblNumberOfDigit, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)))
-					.addGap(3)
-					.addComponent(spinnerDigit, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
+					.addComponent(textField_MinProb, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblNumberOfDigit, GroupLayout.PREFERRED_SIZE, 249, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(spinnerDigit, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+					.addGap(186))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(25)
 					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 722, Short.MAX_VALUE)
@@ -278,22 +246,26 @@ public class SuggestedDocumentsForATopic extends JFrame{
 							.addGap(3)
 							.addComponent(lblSuggestedDocumentsFor))
 						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(5)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(3)
-							.addComponent(lblMinimumProbabilityScore))
-						.addComponent(textField_MinProb, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(textField_MinProb, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(3)
+									.addComponent(lblMinimumProbabilityScore))))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(4)
-							.addComponent(lblNumberOfDigit))
-						.addComponent(spinnerDigit, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(9)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(spinnerDigit, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(9)
+							.addComponent(lblNumberOfDigit)))
+					.addGap(12)
 					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
 					.addGap(11)
 					.addComponent(lblListOfWords)
 					.addGap(11)
-					.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+					.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
 					.addGap(21)
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
 					.addGap(6))

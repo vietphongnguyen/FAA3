@@ -200,7 +200,6 @@ public class FAA3_GUI extends JFrame {
 
 	static int SizeOfInstance;
 	autoDetectNumTopics autoTopic;
-	SuggestedDocumentsForATopic suggestedDocumentsForATopic;
 	private JTextField textField;
 	private JButton btnGetStemWords;
 	private JSpinner spinnerNumWordTipicWordnet;
@@ -243,9 +242,14 @@ public class FAA3_GUI extends JFrame {
 	public static String[] modelContent;
 	FindTopicsByTitlePhrases2 findTopicsByTitlePhrases2;
 	static JTextField textField_RelatedPhrases;
-	private JTextField textField_1;
+	static JTextField textField_LDARelatedTopics;
 	private JTextField txtWeatherConditionhtml;
+	LDATopicsSearch lDATopicsSearch = new LDATopicsSearch();
+	static JButton btnShowResults;
+	static JButton btnEstimateTopics_1;
+	static JTextArea textArea_LDATopicWords;
 
+	public static DefaultListModel<String> listModel_LDATopicsSearch;
 	public void InitWordnet(String wnhome) throws IOException {
 
 		// construct the URL to the Wordnet dictionary directory
@@ -1431,35 +1435,59 @@ public class FAA3_GUI extends JFrame {
 		JLabel lblEstimateTopicsUsing = new JLabel("Estimate topics using LDA");
 		lblEstimateTopicsUsing.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		JButton btnEstimateTopics_1 = new JButton("Estimate topics");
+		btnEstimateTopics_1 = new JButton("Start to Estimate Topics");
+		btnEstimateTopics_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				lDATopicsSearch.actionPerformed_EstimateTopicsSearch();
+			}
+		});
 		
 		JLabel label_4 = new JLabel("Related to:");
 		
-		textField_1 = new JTextField();
-		textField_1.setEditable(false);
-		textField_1.setColumns(10);
+		textField_LDARelatedTopics = new JTextField();
+		textField_LDARelatedTopics.setEditable(false);
+		textField_LDARelatedTopics.setColumns(10);
 		
 		JLabel label_5 = new JLabel("List of words:");
 		label_5.setHorizontalAlignment(SwingConstants.LEFT);
-		JTextArea textArea = new JTextArea();
+		textArea_LDATopicWords = new JTextArea();
+		textArea_LDATopicWords.setLineWrap(true);
 		
-		JScrollPane scrollPane_9 = new JScrollPane(textArea);
+		JScrollPane scrollPane_9 = new JScrollPane(textArea_LDATopicWords);
+		
+		btnShowResults = new JButton("Show Results");
+		btnShowResults.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LDATopicsSearch.suggestedDocumentsForATopic.setVisible(true);
+			}
+		});
+		btnShowResults.setEnabled(false);
+		
+		
+		listModel_LDATopicsSearch = new DefaultListModel();
+		JList list_5 = new JList(listModel_LDATopicsSearch);
+		JScrollPane scrollPane_11 = new JScrollPane(list_5);
 		GroupLayout gl_panel_8 = new GroupLayout(panel_8);
 		gl_panel_8.setHorizontalGroup(
 			gl_panel_8.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_8.createSequentialGroup()
+				.addGroup(Alignment.TRAILING, gl_panel_8.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panel_8.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPane_9, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
-						.addGroup(gl_panel_8.createSequentialGroup()
+					.addGroup(gl_panel_8.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPane_11, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+						.addComponent(scrollPane_9, GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+						.addGroup(Alignment.LEADING, gl_panel_8.createSequentialGroup()
 							.addComponent(lblEstimateTopicsUsing, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnEstimateTopics_1, GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE))
-						.addGroup(gl_panel_8.createSequentialGroup()
+						.addGroup(Alignment.LEADING, gl_panel_8.createSequentialGroup()
 							.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE))
-						.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE))
+							.addComponent(textField_LDARelatedTopics, GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE))
+						.addGroup(Alignment.LEADING, gl_panel_8.createSequentialGroup()
+							.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+							.addGap(97)
+							.addComponent(btnShowResults, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)))
 					.addContainerGap())
 		);
 		gl_panel_8.setVerticalGroup(
@@ -1474,12 +1502,16 @@ public class FAA3_GUI extends JFrame {
 							.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_panel_8.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(textField_LDARelatedTopics, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(label_5)
+					.addGroup(gl_panel_8.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_5)
+						.addComponent(btnShowResults))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(scrollPane_9, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(167, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(scrollPane_11, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		
 		
@@ -2081,8 +2113,8 @@ public class FAA3_GUI extends JFrame {
 		
 		btnGetScore.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				removeTopicSearchFile(txtTextdatafolder.getText(),"P_N_Topic_Search.txt");
-				getTopicDocsScore("P_N_Topic_Search.txt", generateTopics.instances,txSearchTopic.getText());
+				LDATopicsSearch.removeTopicSearchFile(txtTextdatafolder.getText(),"P_N_Topic_Search.txt");
+				LDATopicsSearch.getTopicDocsScore("P_N_Topic_Search.txt", generateTopics.instances,comboBox_TopicSearch.getSelectedItem().toString());
 			}
 		});
 		
@@ -2749,90 +2781,9 @@ public class FAA3_GUI extends JFrame {
 		});
 
 	}
-	protected void getTopicDocsScore(String fileName, InstanceList instances, String searchText) {
-		// TODO Auto-generated method stub
-		// fileName, instances
-		
-		String s;
-		
-		int topic_Search=0;
-		double maxProbabilities = 0;
-		int instanceID = 0;
-		for (Instance I : instances) {
-			s = generateTopics.Get_File_Name(I.getName().toString().replaceAll("%20", " "));
-			if (s.equalsIgnoreCase("P_N_Topic_Search.txt")) {
-				double[] Probabilities = generateTopics.model.getTopicProbabilities(instanceID);
-				
-				for (int topicID = 0; topicID < generateTopics.numTopics; topicID++) {
-					if ( maxProbabilities < Probabilities[topicID]) {
-						topic_Search = topicID;
-						maxProbabilities = Probabilities[topicID];
-					}
-						
-				}
-				break;
-			}
-			instanceID++;
-		}
-		
-		// found that "P_N_Topic_Search.txt" has max value of Probabilities at topic_Search
-		int n = instanceID;
-		String[] fileNames = new String[n] ;
-		double[] probs = new double[n];
-		int NN =-1;
-		instanceID = 0;
-		for (Instance I : instances) {
-			s = generateTopics.Get_File_Name(I.getName().toString().replaceAll("%20", " "));
-			if (!s.equalsIgnoreCase("P_N_Topic_Search.txt")) {
-				double prob = generateTopics.model.getTopicProbabilities(instanceID)[topic_Search];
-				
-					NN++;
-					fileNames[NN] = s;
-					probs[NN] = prob;
-				
-			}
-			instanceID++;
-		}
-		
-		/*for (int i=0 ; i<= NN;i++) {
-			System.out.println(fileNames[i]);
-			System.out.println(probs[i]);
-		}*/
-		for (int i=0; i<n-1; i++) {
-			for (int j = i+1; j<n ; j++) {
-				if (probs[i]<probs[j]) {
-					// Swap
-					String temName = fileNames[i];
-					fileNames[i] = fileNames[j];
-					fileNames[j] = temName;
-					double temProb = probs[i];
-					probs[i] = probs[j];
-					probs[j] = temProb;
-				}
-			}
-		}
-		suggestedDocumentsForATopic = new SuggestedDocumentsForATopic(searchText,fileNames, probs, topic_Search);
-		suggestedDocumentsForATopic.setVisible(true);
-		
-		
-	}
+	
 
-	protected void removeTopicSearchFile(String folder, String fileName) {
-		// folder, fileName
-		try {
-			File file = new File(folder + "\\" + fileName);
-			if (file.delete()) {
-				//System.out.println(file.getName() + " is deleted!");
-			} else {
-				//System.out.println("Delete operation is failed.");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			Outln("Warning: " + e.getMessage());
-		}
-	}
-
-	protected void createTextFileFromTopic(String topicSearch, String folder, int maxNumberOfWords, String fileName) throws Exception {
+	protected static void createTextFileFromTopic(String topicSearch, String folder, int maxNumberOfWords, String fileName) throws Exception {
 		//createTextFileFromTopic(topicSearch, folder, maxNumberOfWords, fileName);
 		String s=""; 
 		Character ch;
