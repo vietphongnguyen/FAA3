@@ -18,6 +18,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.DefaultListModel;
+
 /**
  * @author Phong Nguyen (vietphong.nguyen@gmail.com)
  *
@@ -130,6 +132,13 @@ public class Solr_KnowledgeArchitectureHTMLFile {
 	public List<StringIntegerPair> getRelatedTopics() {
 		
 		return relatedTopics;
+	}
+
+	public void displayListSolr(List<StringIntegerPair> relatedTopics,DefaultListModel listSolr) {
+		for (StringIntegerPair relatedTopic : relatedTopics) {
+			listSolr.addElement(relatedTopic.Topic + " (" + relatedTopic.Frequency + ") ");
+		}
+
 	}
 
 }

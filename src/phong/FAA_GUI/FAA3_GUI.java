@@ -243,13 +243,18 @@ public class FAA3_GUI extends JFrame {
 	FindTopicsByTitlePhrases2 findTopicsByTitlePhrases2;
 	static JTextField textField_RelatedPhrases;
 	static JTextField textField_LDARelatedTopics;
-	private JTextField txtWeatherConditionhtml;
+	private JTextField txtHTMLFile;
 	LDATopicsSearch lDATopicsSearch = new LDATopicsSearch();
 	static JButton btnShowResults;
 	static JButton btnEstimateTopics_1;
 	static JTextArea textArea_LDATopicWords;
 
 	public static DefaultListModel<String> listModel_LDATopicsSearch;
+	private JButton btnGetRelatedTopics;
+	private JComboBox comboBox_2;
+	public static DefaultListModel listSolr;
+	
+	
 	public void InitWordnet(String wnhome) throws IOException {
 
 		// construct the URL to the Wordnet dictionary directory
@@ -1371,23 +1376,27 @@ public class FAA3_GUI extends JFrame {
 		JLabel lblSolrKnowledgeArchitecture = new JLabel("Solr Knowledge Architecture");
 		lblSolrKnowledgeArchitecture.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		JButton btnGetRelatedTopics = new JButton("Get Related Topics on Solr");
+		btnGetRelatedTopics = new JButton("Get Related Topics on Solr");
+		
 		
 		JLabel label_7 = new JLabel("Solr HTML output");
 		label_7.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		txtWeatherConditionhtml = new JTextField();
-		txtWeatherConditionhtml.setText("weather condition.html");
-		txtWeatherConditionhtml.setColumns(10);
+		txtHTMLFile = new JTextField();
+		txtHTMLFile.setText("weather condition.html");
+		txtHTMLFile.setColumns(10);
 		
 		JLabel label_8 = new JLabel("Solr server");
 		label_8.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		JComboBox comboBox_2 = new JComboBox();
+		comboBox_2 = new JComboBox();
 		comboBox_2.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		comboBox_2.setModel(new DefaultComboBoxModel(new String[] {"http://localhost:8983/solr/knowledgeArchitecture.html", "http://130.101.10.139:8983/solr/knowledgeArchitecture.html", "http://"}));
 		comboBox_2.setEditable(true);
-		JList list_4 = new JList();
+		
+		
+		listSolr = new DefaultListModel();
+		JList list_4 = new JList(listSolr);
 		JScrollPane scrollPane_10 = new JScrollPane(list_4);
 		GroupLayout gl_panel_9 = new GroupLayout(panel_9);
 		gl_panel_9.setHorizontalGroup(
@@ -1402,7 +1411,7 @@ public class FAA3_GUI extends JFrame {
 						.addGroup(gl_panel_9.createSequentialGroup()
 							.addComponent(label_7, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtWeatherConditionhtml, GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
+							.addComponent(txtHTMLFile, GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
 						.addGroup(gl_panel_9.createSequentialGroup()
 							.addComponent(label_8, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -1419,7 +1428,7 @@ public class FAA3_GUI extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel_9.createParallelGroup(Alignment.BASELINE)
 						.addComponent(label_7)
-						.addComponent(txtWeatherConditionhtml, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(txtHTMLFile, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel_9.createParallelGroup(Alignment.BASELINE)
 						.addComponent(label_8)
@@ -2055,6 +2064,24 @@ public class FAA3_GUI extends JFrame {
 	
 	private void createEvents() {
 
+		btnGetRelatedTopics.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Solr_KnowledgeArchitectureHTMLFile sKA =  new Solr_KnowledgeArchitectureHTMLFile(txtHTMLFile.getText());
+				sKA.displayListSolr(sKA.getRelatedTopics(), listSolr);
+				
+				
+				// getHTML("http://localhost:8983/solr/knowledgeArchitecture.html?query=perform+handoff");
+				HTML html;
+				try {
+					html = new HTML(comboBox.getSelectedItem().toString() + "?query=" + comboBox_1.getSelectedItem().toString());
+					//displayListSolr(html.getRelatedTopics(),listSolr);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
 		list_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {

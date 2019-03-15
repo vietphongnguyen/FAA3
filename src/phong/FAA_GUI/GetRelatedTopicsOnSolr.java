@@ -63,14 +63,14 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				
 				Solr_KnowledgeArchitectureHTMLFile sKA =  new Solr_KnowledgeArchitectureHTMLFile(comboBox_HtmlFile.getSelectedItem().toString());
-				displayListSolr(sKA.getRelatedTopics());
+				displayListSolr(sKA.getRelatedTopics(),listSolr);
 				
 				
 				// getHTML("http://localhost:8983/solr/knowledgeArchitecture.html?query=perform+handoff");
 				HTML html;
 				try {
 					html = new HTML(comboBox.getSelectedItem().toString() + "?query=" + comboBox_1.getSelectedItem().toString());
-					displayListSolr(html.getRelatedTopics());
+					displayListSolr(html.getRelatedTopics(),listSolr);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -82,7 +82,7 @@ public class GetRelatedTopicsOnSolr extends JFrame{
 		
 	}
 
-	protected void displayListSolr(List<StringIntegerPair> relatedTopics) {
+	public void displayListSolr(List<StringIntegerPair> relatedTopics, DefaultListModel listSolr) {
 		for (StringIntegerPair relatedTopic : relatedTopics) {
 			listSolr.addElement(relatedTopic.Topic + " (" + relatedTopic.Frequency + ") ");
 		}
