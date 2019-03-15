@@ -253,6 +253,8 @@ public class FAA3_GUI extends JFrame {
 	private JButton btnGetRelatedTopics;
 	private JComboBox comboBox_2;
 	public static DefaultListModel listSolr;
+	static JScrollPane scrollPane_11;
+	static JList list_5;
 	
 	
 	public void InitWordnet(String wnhome) throws IOException {
@@ -1465,7 +1467,7 @@ public class FAA3_GUI extends JFrame {
 		
 		JScrollPane scrollPane_9 = new JScrollPane(textArea_LDATopicWords);
 		
-		btnShowResults = new JButton("Show Results");
+		btnShowResults = new JButton("Show More Detail Results");
 		btnShowResults.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LDATopicsSearch.suggestedDocumentsForATopic.setVisible(true);
@@ -1475,8 +1477,8 @@ public class FAA3_GUI extends JFrame {
 		
 		
 		listModel_LDATopicsSearch = new DefaultListModel();
-		JList list_5 = new JList(listModel_LDATopicsSearch);
-		JScrollPane scrollPane_11 = new JScrollPane(list_5);
+		list_5 = new JList(listModel_LDATopicsSearch);
+		scrollPane_11 = new JScrollPane(list_5);
 		GroupLayout gl_panel_8 = new GroupLayout(panel_8);
 		gl_panel_8.setHorizontalGroup(
 			gl_panel_8.createParallelGroup(Alignment.LEADING)

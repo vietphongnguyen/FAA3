@@ -131,11 +131,14 @@ public class LDATopicsSearch {
 		}
 		printListOfWordsInTopic(topic_Search, FAA3_GUI.textArea_LDATopicWords);
 		
-		//printSuggestedDocumentsForATopic(FAA3_GUI.listModel_LDATopicsSearch, new DecimalFormat("#,##0.0000"), fileNames, probs);
+		
 		searchText = FAA3_GUI.textField_LDARelatedTopics.getText();
 		suggestedDocumentsForATopic = new SuggestedDocumentsForATopic(searchText,fileNames, probs, topic_Search);
-		suggestedDocumentsForATopic.setVisible(true);
+		//suggestedDocumentsForATopic.setVisible(true);
 		
+		printSuggestedDocumentsForATopic(FAA3_GUI.listModel_LDATopicsSearch, new DecimalFormat("#,##0.0000"), fileNames, probs);
+		FAA3_GUI.scrollPane_11.repaint();
+		FAA3_GUI.list_5.ensureIndexIsVisible(0);
 		
 	}
 	
